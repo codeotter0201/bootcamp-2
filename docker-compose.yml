@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/app
+    environment:
+      - FLASK_APP=main.py
+    ports:
+      - 5000:5000
+    command: flask run --host=0.0.0.0 --reload
+    networks:
+      - my_network
+
+  db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+      - MYSQL_DATABASE=testdb
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+    volumes:
+      - ./app/data:/var/lib/mysql
+    working_dir: /var/lib/mysql
+    networks:
+      - my_network
+
+networks:
+  my_network:
