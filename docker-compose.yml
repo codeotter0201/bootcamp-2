@@ -8,10 +8,13 @@ services:
     volumes:
       - ./app:/app
     environment:
-      - FLASK_APP=main.py
+      - FLASK_APP=app.py
     ports:
-      - 5000:5000
+      - 3000:5000
     command: flask run --host=0.0.0.0 --reload
+    # command: python app.py
+    depends_on:
+      - db
     networks:
       - my_network
 
@@ -25,7 +28,7 @@ services:
       - MYSQL_USER=test
       - MYSQL_PASSWORD=test
     volumes:
-      - ./app/data:/var/lib/mysql
+      - ./app/sqldata:/var/lib/mysql
     working_dir: /var/lib/mysql
     networks:
       - my_network
