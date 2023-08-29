@@ -37,33 +37,7 @@ class Attraction(db.Model):
     poi = db.Column(db.String(1))
     idpt = db.Column(db.String(255))
     avend = db.Column(db.String(255))
-
-    def to_dict(self):
-        attraction_dict = {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'address': self.address,
-            'longitude': self.longitude,
-            'latitude': self.latitude,
-            'mrt': self.mrt,
-            'file': self.file,
-            'rate': self.rate,
-            'direction': self.direction,
-            'date': self.date,
-            'ref_wp': self.ref_wp,
-            'avbegin': self.avbegin,
-            'langinfo': self.langinfo,
-            'serial_no': self.serial_no,
-            'rownumber': self.rownumber,
-            'cat': self.cat,
-            'memo_time': self.memo_time,
-            'poi': self.poi,
-            'idpt': self.idpt,
-            'avend': self.avend
-        }
-        return attraction_dict
-
+    
 class AttractionFile(db.Model):
     __tablename__ = 'attraction_file'
 
@@ -72,14 +46,6 @@ class AttractionFile(db.Model):
     file_url = db.Column(db.String(255))
     
     attraction = db.relationship('Attraction', backref=db.backref('files', lazy=True))
-
-    def to_dict(self):
-        file_dict = {
-            'id': self.id,
-            'attraction_id': self.attraction_id,
-            'file_url': self.file_url
-        }
-        return file_dict
 
 def clean_data_and_save_to_sql():
     with open('data/taipei-attractions.json', encoding='utf-8-sig') as file:
@@ -151,12 +117,13 @@ def thankyou():
 def setup():
     setup_db()
     return 'ok'
+
 @app.route('/api/attractions', methods=['GET'])
 def get_attractions():
     keyword = request.args.get('keyword', None)  # 獲取關鍵字參數
     try:
-        n = int(request.args.get('page', 0))
-        if n < 0:
+        page_number = int(request.args.get('page', 0))
+        if page_number < 0:
             response = jsonify(error=True, message=str("請輸入正整數的頁碼"))
             response.status_code = 500
             return make_response(response)
@@ -164,16 +131,21 @@ def get_attractions():
         response = jsonify(error=True, message=str("請輸入正整數的頁碼"))
         response.status_code = 500
         return make_response(response)
-    
+
+    page_size = 12  # Number of rows per page
+    offset = page_number * page_size
+
     if keyword:
-        attractions = Attraction.query.filter(Attraction.name.like(f"%{keyword}%") | Attraction.mrt.like(f"%{keyword}%")).all()
+        # attractions = Attraction.query.filter(Attraction.name.like(f"%{keyword}%") | Attraction.mrt.like(f"%{keyword}%")).all()
+        attractions = Attraction.query.filter(
+            (Attraction.name.like(f"%{keyword}%")) | (Attraction.mrt==keyword)
+        ).offset(offset).limit(page_size).all()
     else:
-        attractions = Attraction.query.all()
+        # attractions = Attraction.query.all()
+        attractions = Attraction.query.offset(offset).limit(page_size).all()
 
     attraction_list = []
-    select_attractions = [i for i in attractions][n*12:(n+1)*12]
-
-    for attraction in select_attractions:
+    for attraction in attractions:
         attraction_dict = {
             "id": attraction.id,
             "name": attraction.name,
@@ -189,7 +161,7 @@ def get_attractions():
         attraction_list.append(attraction_dict)
         
     response = {
-        "nextPage": n+1,
+        "nextPage": page_number+1,
         "data": attraction_list
     }
     return json.dumps(response, ensure_ascii=False).encode('utf8')
