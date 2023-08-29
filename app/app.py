@@ -201,23 +201,16 @@ def get_attraction_by_id(attractionId):
 @app.route('/api/mrts', methods=['GET'])
 def get_mrts():
     try:
-        attractions = Attraction.query.limit(40).all()
+        attractions = db.session.query(Attraction.mrt, db.func.count()).group_by(Attraction.mrt).order_by(db.func.count().desc()).all()
+        sorted_mrts = [mrt for mrt, count in attractions]
+        response = {
+            "data": sorted_mrts
+        }
+        return jsonify(response)
     except:
         response = jsonify(error=True, message=str("資料庫讀取錯誤"))
         response.status_code = 500
         return make_response(response)
-
-    temp = {}
-    for i in attractions:
-         temp[i.mrt] = temp.get(i.mrt, 0)
-         temp[i.mrt] += 1
-
-    sorted_data = sorted(temp.items(), key=lambda x: x[1], reverse=True)
-    sorted_mrts = [item[0] for item in sorted_data]
-    response = {
-        "data": sorted_mrts
-    }
-    return json.dumps(response, ensure_ascii=False).encode('utf8')
      
 if __name__ == "__main__": 
     app.run(host="0.0.0.0", port=3000)
