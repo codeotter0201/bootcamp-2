@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./flaskr:/app
-    # environment:
-    #   - FLASK_APP=flaskr.py
+    environment:
+      - FLASK_APP=__init__.py
     ports:
       - 3000:5000
     command: flask run --host=0.0.0.0 --reload
