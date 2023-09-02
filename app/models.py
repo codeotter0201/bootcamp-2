@@ -36,11 +36,7 @@ class AttractionFile(db.Model):
     
     attraction = db.relationship('Attraction', backref=db.backref('files', lazy=True))
 
-def clean_data_and_save_to_sql():
-    with open('data/taipei-attractions.json', encoding='utf-8-sig') as file:
-        data = json.load(file)
-        data = data['result']['results']
-
+def clean_data_and_save_to_sql(data:dict):
     pattern = 'https://'
     for spot in data:
         spot['file'] = [pattern + i for i in spot['file'].split(pattern) if ('.jpg' in i) | ('.png' in i) | ('.JPG' in i) | ('.PNG' in i)]
@@ -85,4 +81,7 @@ def setup_db(app):
     with app.app_context():
         db.create_all()
         if not Attraction.query.first():
-            clean_data_and_save_to_sql()
+            with open('data/taipei-attractions.json', encoding='utf-8-sig') as file:
+                data = json.load(file)
+                data = data['result']['results']
+            clean_data_and_save_to_sql(data)

@@ -6,7 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./flaskr:/app
+      - ./app:/app
+      - ./data:/app/data
     environment:
       - FLASK_APP=__init__.py
     ports:
@@ -30,7 +31,7 @@ services:
       - MYSQL_USER=test
       - MYSQL_PASSWORD=test
     volumes:
-      - ./flaskr/sqldata:/var/lib/mysql
+      - ./db:/var/lib/mysql
     working_dir: /var/lib/mysql
     networks:
       - my_network
