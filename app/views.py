@@ -8,7 +8,8 @@ api = Blueprint('api', __name__)
 # Pages
 @api.route("/")
 def index():
-	return render_template("index.html")
+    # url = url_for('template', 'index.html')
+    return render_template("index.html")
 @api.route("/attraction/<id>")
 def attraction(id):
 	return render_template("attraction.html")
@@ -111,3 +112,12 @@ def get_mrts():
         response = jsonify(error=True, message=str("資料庫讀取錯誤"))
         response.status_code = 500
         return make_response(response)
+    
+
+@api.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'  # 允許的網域
+    # response.headers['Access-Control-Allow-Origin'] = 'http://127.0.0.1:3002'  # 允許的網域
+    # response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'  # 允許的 HTTP 方法
+    # response.headers['Access-Control-Allow-Headers'] = 'Content-Type'  # 允許的標頭
+    return response
