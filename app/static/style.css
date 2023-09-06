@@ -124,6 +124,7 @@ main {
   background-repeat: no-repeat;
   background-position: right center;
   background-size: contain;
+  box-sizing: border-box;
 
   color: var(--secondary-color-gray-50, #757575);
   /* Body - Bold 16(13.3) */
@@ -260,31 +261,30 @@ main {
   max-width: 1200px;
   margin-right: auto;
   margin-left: auto;
-  padding-top: 10px;
+  /* padding-top: 10px; */
 }
 
 
 .attractions-group {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  /* justify-content: flex-start; */
-  justify-content: center;
+  justify-content: flex-start;
+  margin-left: 15px;
+  margin-top: 15px;
+  gap: 30px;
 }
 
 .attration {
   display: flex;
   flex-direction: column;
-  width: 270px;
+  max-width: 270px;
   height: 242px;
   border-radius: 5px;
   border: 1px solid var(--secondary-color-gray-20, #E8E8E8);
   background: var(--White, #FFF);
-  margin: 10px;
-
+  box-sizing: border-box;
   color: var(--secondary-color-gray-50, #757575);
   text-align: right;
-
   font-size: 16px;
   font-weight: 500;
 }
@@ -300,8 +300,10 @@ main {
 
   display: flex;
   align-items: center;
+  text-align: left;
 
   padding: 10px;
+  max-width: 270px;
   
   bottom: 0px;
   height: 20px;
@@ -380,10 +382,6 @@ main {
     max-width: 628px;
   }
 
-  .attractions-group {
-    justify-content: center;
-  }
-
 }
 
 @media (max-width: 767px) {
@@ -403,17 +401,59 @@ main {
     width: 225px;
   }
 
+  .list-bar {
+    max-width: 360px;
+  }
+
   .list-bar .mid-container{
     max-width: 246px;
   }
 
-  .attration {
+  .attractions-group {
     width: 322px;
+    margin: 0;
+    padding: 15px;
+    justify-content: center;
+    /* align-items: center; */
+    gap: 0;
+    row-gap: 15px;
+  }
+
+  .attration {
+    max-width: 322px;
+    width: 100%;
     height: 280px;
   }
 
-  .attractions-group {
-    justify-content: center;
+  .attration-img {
+    width: 322px;
+    height: 235px;
+  }
+
+  .attration-file {
+    height: 235px;
+  }
+
+  .attration-name {
+    width: 302px;
+    max-width: 322px;
+  }
+
+  .attration-details, .attration-details * {
+    max-width: 322px;
+    width: 322px;
+  }
+
+  .attration-info {
+    max-width: 302px;
+  }
+
+  .attration-info div:nth-child(1) {
+    width: 150px;
+  }
+  
+  .attration-info div:nth-child(2) {
+    width: 150px;
   }
 
 }
