@@ -373,13 +373,17 @@ main {
 /* attractions-part */
 
 /* RWD-part */
-@media (min-width: 768px) and (max-width: 1199px) {
+@media (min-width: 768px) and (max-width: 1299px) {
   .welcome .text {
     max-width: 768px;
   }
 
   .list-bar .mid-container{
     max-width: 628px;
+  }
+
+  .attractions-group {
+    justify-content: center;
   }
 
 }
