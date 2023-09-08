@@ -62,15 +62,24 @@
 
   
   <script>
-    const midContainerList = document.querySelector('.mid-container-list');
-    const scrollAmount = 600; // 調整滾動的距離
-
     const moveLeft = () => {
-      midContainerList.scrollLeft -= scrollAmount;
+      const midContainerList = document.querySelector('.mid-container-list');
+      const scrollAmount = 100; // Adjust this value as needed
+
+      midContainerList.scrollTo({
+        left: midContainerList.scrollLeft - scrollAmount,
+        behavior: 'smooth',
+      });
     };
 
     const moveRight = () => {
-      midContainerList.scrollLeft += scrollAmount;
+      const midContainerList = document.querySelector('.mid-container-list');
+      const scrollAmount = 100; // Adjust this value as needed
+
+      midContainerList.scrollTo({
+        left: midContainerList.scrollLeft + scrollAmount,
+        behavior: 'smooth',
+      });
     };
 
     const createAttration = (name, imgSrc, mrt, category) => {
@@ -180,39 +189,37 @@
       return dataList;
     }
 
+    let nextPage = 0;
+    let timer = null;
+    let isComposing = false;
+
     async function createAttractionsByPage(page) {
+      isComposing = true;
       const response = await fetch(`http://52.52.144.73:3000/api/attractions?page=${page}`);
       const data = await response.json();
       const dataList = data.data;
       for (let item of dataList) {
         createAttration(item.name, item.images[0], item.mrt, item.category)
       }
+      isComposing = false;
       return data;
     }
 
-    let nextPage = 0;
-    let timer = null;
-
     function handleIntersection(entries) {
       const searchInput = document.querySelector('.search-input');
-      if (searchInput.value) {
+      
+      if (searchInput.value || isComposing) {
         return;
       }
+
       if (entries[0].isIntersecting) {
-        if (timer) {
-          clearTimeout(timer);
-        }
-        
-        timer = setTimeout(() => {
-          createAttractionsByPage(nextPage)
+        createAttractionsByPage(nextPage)
             .then(data => {
               nextPage = data.nextPage;
             })
             .catch(error => {
               console.error('Error:', error);
             });
-          timer = null;
-        }, 200);
       }
     }
     const observer = new IntersectionObserver(handleIntersection);

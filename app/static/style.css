@@ -378,6 +378,10 @@ main {
     max-width: 768px;
   }
 
+  .list-bar {
+    max-width: 768px;
+  }
+
   .list-bar .mid-container{
     max-width: 628px;
   }
