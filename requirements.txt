@@ -1,5 +1,6 @@
 Flask==2.3.2
 Flask-Login==0.4.1
 flask_sqlalchemy
+Flask-Migrate
 pymysql
 cryptography

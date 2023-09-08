@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap&subset=chinese-traditional" rel="stylesheet">
+  <title>台北一日遊</title>
+  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
+  <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+  <header class="desktop">
+    <div class="navigation">
+      <a href="/" class="left">
+        <span class="title">台北一日遊</span>
+      </a>
+      <div class="right">
+        <a href="" class="menu-item">預定行程</a>
+        <a href="" class="menu-item">登入/註冊</a>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="welcome">
+      <div class="text">
+        <div class="slogan">
+          <div class="title">輕鬆享受台北一日悠閒</div>
+          <div class="subtitle">探索每個角落，體驗城市的深度旅遊行程</div>
+        </div>
+        <div class="search-bar">
+          <input class="search-input" type="text" placeholder="輸入景點名稱查詢">
+          <button class="search-btn" onclick="searchKeyword()">
+            <img src="../static/search_icon.png" alt="">
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <div class="list-bar">
+      <span class="left-container">
+        <button class="left-arrow" onclick="moveLeft()"></button>
+      </span>
+        
+      <span class="mid-container">
+        <div class="mid-container-list"></div>
+      </span>
+
+      <span class="right-container">
+        <button class="right-arrow", onclick="moveRight()"></button>
+      </span>
+    </div>
+
+    <div class="attractions">
+      <div class="attractions-group"></div>
+    </div>
+
+    <div class="footer">COPYRIGHT © 2021 台北一日遊</div>
+  </main>
+
+  
+  <script>
+    const moveLeft = () => {
+      const midContainerList = document.querySelector('.mid-container-list');
+      const scrollAmount = 100; // Adjust this value as needed
+
+      midContainerList.scrollTo({
+        left: midContainerList.scrollLeft - scrollAmount,
+        behavior: 'smooth',
+      });
+    };
+
+    const moveRight = () => {
+      const midContainerList = document.querySelector('.mid-container-list');
+      const scrollAmount = 100; // Adjust this value as needed
+
+      midContainerList.scrollTo({
+        left: midContainerList.scrollLeft + scrollAmount,
+        behavior: 'smooth',
+      });
+    };
+
+    const createAttration = (name, imgSrc, mrt, category) => {
+      // 創建 attration 元素
+      const attration = document.createElement('div');
+      attration.classList.add('attration');
+
+      // 創建 attration-img 元素
+      const attrationImg = document.createElement('div');
+      attrationImg.classList.add('attration-img');
+
+      // 創建 attration-file 元素
+      const attrationFile = document.createElement('img');
+      attrationFile.classList.add('attration-file');
+      attrationFile.src = imgSrc;
+      attrationFile.alt = '';
+      attrationImg.appendChild(attrationFile);
+
+      // 創建 attration-name 元素
+      const attrationName = document.createElement('div');
+      attrationName.classList.add('attration-name');
+      attrationName.textContent = name;
+      attrationImg.appendChild(attrationName);
+
+      // 添加 attration-img 到 attration
+      attration.appendChild(attrationImg);
+
+      // 創建 attration-details 元素
+      const attrationDetails = document.createElement('div');
+      attrationDetails.classList.add('attration-details');
+
+      // 創建 attration-info 元素
+      const attrationInfo = document.createElement('div');
+      attrationInfo.classList.add('attration-info');
+
+      // 創建兩個 div 元素並設置內容
+      const div1 = document.createElement('div');
+      div1.textContent = mrt;
+      attrationInfo.appendChild(div1);
+
+      const div2 = document.createElement('div');
+      div2.textContent = category;
+      attrationInfo.appendChild(div2);
+
+      // 添加 attration-info 到 attration-details
+      attrationDetails.appendChild(attrationInfo);
+
+      // 添加 attration-details 到 attration
+      attration.appendChild(attrationDetails);
+
+      // 將 attration 添加到 attractions-group
+      const attractionsGroup = document.querySelector('.attractions-group');
+      attractionsGroup.appendChild(attration);
+    };
+
+    const createMrt = (name) => {
+        // 創建 span 元素
+        const span = document.createElement('span');
+        span.classList.add('mid-container-list-listitem');
+        span.textContent = name;
+        span.addEventListener('click', () => {
+          const input = document.querySelector('.search-input');
+          input.value = name;
+          const container = document.querySelector('.attractions-group');
+          container.innerHTML = '';
+          createAttractionsBySearchingName(name)
+        });
+
+        // 將 span 元素添加到容器中
+        const container = document.querySelector('.mid-container-list');
+        container.appendChild(span);
+    };
+
+    function searchKeyword() {
+      // 獲取 search-input 元素
+      const input = document.querySelector('.search-input');
+      // 獲取 input 的值
+      const keyword = input.value;
+      const container = document.querySelector('.attractions-group');
+      container.innerHTML = '';
+      createAttractionsBySearchingName(keyword);
+    }
+
+    async function fetchhMrts() {
+      const response = await fetch(`http://52.52.144.73:3000/api/mrts`);
+      const data = await response.json();
+      const dataList = data.data;
+      for (let item of dataList) {
+        createMrt(item);
+      }
+      return dataList;
+    }
+
+    async function createAttractionsBySearchingName(name) {
+      const response = await fetch(`http://52.52.144.73:3000/api/attractions?keyword=${encodeURIComponent(name)}`);
+      const data = await response.json();
+      const dataList = data.data;
+      for (let item of dataList) {
+        createAttration(item.name, item.images[0], item.mrt, item.category)
+      }
+      if (dataList.length === 0) {
+        const attractionsGroup = document.querySelector('.attractions-group');
+        const h2 = document.createElement('h2');
+        h2.textContent = '搜尋的關鍵字找不到任何資料🥺';
+        attractionsGroup.appendChild(h2);
+      }
+      return dataList;
+    }
+
+    let nextPage = 0;
+    let timer = null;
+    let isComposing = false;
+
+    async function createAttractionsByPage(page) {
+      isComposing = true;
+      const response = await fetch(`http://52.52.144.73:3000/api/attractions?page=${page}`);
+      const data = await response.json();
+      const dataList = data.data;
+      for (let item of dataList) {
+        createAttration(item.name, item.images[0], item.mrt, item.category)
+      }
+      isComposing = false;
+      return data;
+    }
+
+    function handleIntersection(entries) {
+      const searchInput = document.querySelector('.search-input');
+      
+      if (searchInput.value || isComposing) {
+        return;
+      }
+
+      if (entries[0].isIntersecting && (nextPage || (nextPage === 0))) {
+        createAttractionsByPage(nextPage)
+            .then(data => {
+              nextPage = data.nextPage;
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+      }
+    }
+    const observer = new IntersectionObserver(handleIntersection);
+    const target = document.querySelector('.footer');
+    observer.observe(target);
+
+    fetchhMrts();
+
+  </script>
+</body>
+
+
+
+</html>

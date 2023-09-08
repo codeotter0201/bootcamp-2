@@ -7,31 +7,39 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./app:/app
+      - ./data:/app/data
     environment:
-      - FLASK_APP=app.py
+      - FLASK_APP=__init__.py
     ports:
       - 3000:5000
     command: flask run --host=0.0.0.0 --reload
-    # command: python app.py
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - my_network
 
   db:
     image: mysql:latest
-    ports:
-      - "3306:3306"
+    expose:
+      - 3306
+    # ports:
+    #   - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=test
       - MYSQL_DATABASE=testdb
       - MYSQL_USER=test
       - MYSQL_PASSWORD=test
     volumes:
-      - ./app/sqldata:/var/lib/mysql
+      - ./db:/var/lib/mysql
     working_dir: /var/lib/mysql
     networks:
       - my_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
 
 networks:
   my_network:
