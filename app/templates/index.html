@@ -212,7 +212,7 @@
         return;
       }
 
-      if (entries[0].isIntersecting && nextPage) {
+      if (entries[0].isIntersecting && (nextPage || (nextPage === 0))) {
         createAttractionsByPage(nextPage)
             .then(data => {
               nextPage = data.nextPage;
