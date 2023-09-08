@@ -34,7 +34,7 @@ def get_attractions():
         response.status_code = 500
         return make_response(response)
 
-    page_size = 12  # Number of rows per page
+    page_size = 13  # Number of rows per page
     offset = page_number * page_size
 
     if keyword:
@@ -60,9 +60,11 @@ def get_attractions():
             "images": [i.file_url for i in AttractionFile.query.filter_by(attraction_id=attraction.id).all()]
         }
         attraction_list.append(attraction_dict)
-        
+    
+    nextPage = page_number + 1 if len(attractions) == 13 else None
+
     response = {
-        "nextPage": page_number+1,
+        "nextPage": nextPage,
         "data": attraction_list
     }
     return json.dumps(response, ensure_ascii=False).encode('utf8')
