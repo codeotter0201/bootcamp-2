@@ -21,15 +21,37 @@
     </div>
   </header>
   <section class="product" id="{{ id_value }}">
-    <div class="picture">
-      <img src="../static/welcome.png" alt="">
+    <div id="carousel">
+      <div class="slides">
+        <button class="left_btn" onclick=""></button>
+        <button class="right_btn" onclick=""></button>
+        <div class="dots"></div>
+      </div>
     </div>
       
     <div class="profile">
-      <div class="profile-title">平安鐘</div>
-      <div class="profile-describe">nice place</div>
+      <div class="profile-title"></div>
+      <div class="profile-describe"></div>
       <div class="booking-form">
-        test
+        <div class="product-text">
+          <p><b>訂購導覽行程</b></p>
+          <p>以此景點為中心的一日行程，帶您探索城市角落故事</p>
+        </div>
+        <div class="select-date">
+          <p><b>選擇日期：</b></p>
+          <input type="date" class="calender" required><br>
+        </div>
+        <div class="select-session">
+          <p><b>選擇時間：</b></p>
+          <input type="radio" id="optionA" name="option" value="A" required>
+          <label for="optionA">上半天</label>
+          <input type="radio" id="optionB" name="option" value="B" required>
+          <label for="optionB">下半天</label>
+        </div>
+        <div class="product-fee">
+          <p><b>導覽費用：</b></p>
+        </div>
+        <button class="booking-button">開始預約行程</button>
       </div>
     </div>
   </section>
@@ -37,16 +59,126 @@
   <body>
     <div class="infors">
       <div class="infors-content">
-        <p>平安鐘祈求大家的平安，這是為了紀念921地震週年的設計，在喧鬧的廣場上每個小時鳴鐘，保佑平安，祈禱臺灣不會再發生這樣的天災。雙手合十加上108個黃色的琉璃乳丁，隨著緩緩流下的水，在底下的一個小噴泉噴出。雙手合十的意義，一個是祈福，一個是包容，教我們要包容這樣的改變，撫平這樣的傷口。下面的水緩緩流出，代表著人的生命力是不斷地延續下去。緩緩地鐘聲，卻帶來心中的寧靜。 這個平安鐘是由建築師姚仁喜與琉璃創作家王俠軍共同設計，長6公尺、寬5公尺，以鑄銅製成，由法鼓山文教基金會全額出資。平安鐘點綴都市景觀，不時提醒大家，面對刻骨銘心的災難痛苦，更應該有謙卑的一顆心。</p>
+        <p id="description"></p>
       </div>
       <div class="infors-address">
         <p style="font-weight: 700;">景點地址：</p>
-        <p>臺北市 大安區忠孝東路4段</p>
+        <p id="address"></p>
       </div>
       <div class="infors-routine">
         <p style="font-weight: 700;">交通方式：</p>
-        <p>捷運站名：忠孝復興站4號出口1.公車：204、212、212直、232、232副、262、262(區間)、278、299、521、605、605(副)、605(新台五線)、667、903、忠孝新幹線至頂好市場站 2.車位：太平洋崇光百貨地下停車場或市民大道附近地下停車場</p>
+        <p id="transportation"></p>
       </div>
     </div>
     <div class="footer">COPYRIGHT © 2021 台北一日遊</div>
+
+    <script>
+      // function createImages(urls) {
+      //   const slidesContainer = document.querySelector('.slides');
+      //   const dotsContainer = document.querySelector('.dots');
+      //   urls.forEach(img => {
+      //     const slide = document.createElement('div');
+      //     slide.classList.add('slide');
+      //     slide.innerHTML = `<img src="${img}" alt="Slide">`;
+      //     slidesContainer.appendChild(slide);
+          
+      //     const dot = document.createElement('p');
+      //     dot.innerHTML = "<p>0<\p>"
+      //     dotsContainer.appendChild(dot);
+      //   });
+      // };
+
+      function createImages(urls) {
+        const slidesContainer = document.querySelector('.slides');
+        const dotsContainer = document.querySelector('.dots');
+        const slides = [];
+        const dots = [];
+
+        urls.forEach((img, index) => {
+          const slide = document.createElement('div');
+          slide.classList.add('slide');
+          slide.innerHTML = `<img src="${img}" alt="Slide">`;
+          slidesContainer.appendChild(slide);
+          slides.push(slide);
+
+          const dot = document.createElement('div');
+          dot.classList.add('dot');
+          dot.addEventListener('click', () => {
+            showSlide(index);
+          });
+          dotsContainer.appendChild(dot);
+          dots.push(dot);
+        });
+
+        // 有動畫效果，但是會破圖
+        // function showSlide(index) {
+        //   const slideWidth = slides[0].offsetWidth;
+        //   slidesContainer.style.transform = `translateX(-${slideWidth * index}px)`;
+
+        //   slides.forEach((slide, i) => {
+        //     if (i === index) {
+        //       slide.style.display = 'block';
+        //       dots[i].classList.add('active');
+        //     } else {
+        //       slide.style.display = 'none';
+        //       dots[i].classList.remove('active');
+        //     }
+        //   });
+        // }
+
+        function showSlide(index) {
+          slides.forEach((slide, i) => {
+            if (i === index) {
+              slide.style.display = 'block';
+              dots[i].classList.add('active');
+            } else {
+              slide.style.display = 'none';
+              dots[i].classList.remove('active');
+            }
+          });
+        }
+
+        showSlide(0);
+      };
+
+      async function createAttractionById(id_value) {
+        isComposing = true;
+        const response = await fetch(`http://52.52.144.73:3000/api/attraction/${id_value}`);
+        const data = await response.json();
+        isComposing = false;
+        return data;
+      };
+
+      const productId = document.querySelector(".product").id;
+      // console.log(productId);
+
+      createAttractionById(1)
+        .then(data => {
+          const attraction_data = data.data;
+          console.log(attraction_data);
+
+          createImages(attraction_data.images);
+
+          const profileTitleElement = document.querySelector(".profile-title");
+          profileTitleElement.innerHTML = attraction_data.name;
+
+          const profileDescribeElement = document.querySelector(".profile-describe");
+          profileDescribeElement.innerHTML = attraction_data.category + " at " + attraction_data.mrt;
+
+          const descriptionElement = document.getElementById('description');
+          descriptionElement.innerHTML = attraction_data.description;
+
+          const addressElement = document.getElementById('address');
+          addressElement.innerHTML = attraction_data.address;
+
+          const transportationElement = document.getElementById('transportation');
+          transportationElement.innerHTML = attraction_data.transport;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
+      // console.log(createAttractionsByPage(2))
+
+    </script>
   </body>

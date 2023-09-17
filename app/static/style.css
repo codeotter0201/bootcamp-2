@@ -3,6 +3,7 @@
 * {
   font-family: "Noto Sans TC", sans-serif;
   font-style: normal;
+  color: #666;
 }
 
 html{
@@ -220,10 +221,8 @@ main {
   cursor: pointer; /* 添加光標指示 */
   width: 32px;
   height: 32px;
-  /* padding: 9px 0 9px 15px; */
   padding: 0;
   margin: 9px 0 9px 15px;
-  /* padding-top: 9px; */
 }
 
 .left-arrow:hover {
@@ -239,7 +238,6 @@ main {
   cursor: pointer; /* 添加光標指示 */
   width: 32px;
   height: 32px;
-  /* padding: 9px 15px 9px 0; */
   padding: 0;
   margin: 9px 15px 9px 0;
 
@@ -393,6 +391,10 @@ header {
   margin-bottom: 37px;
 }
 
+.product * {
+  user-select: none;
+}
+
 .separator {
   margin: 0 auto 0;
   max-width: 1200px;
@@ -401,18 +403,163 @@ header {
   border-color: #E8E8E8;
 }
 
-.picture {
+.carousel {
   padding: 0 15px 0;
 }
 
-.picture img {
+.slides {
+  display: flex;
+  overflow: hidden;
+  max-width: 540px;
+  position: relative;
+}
+
+.slide img {
+  display: flex;
   width: 540px;
   height: 406px;
+}
+
+.left_btn {
+  background-image: url(left-arrow.png);
+  background-repeat: no-repeat; /* 禁止背景圖片重複 */
+  background-position: center; 
+  background-color: transparent; 
+  border: none; /* 移除按鈕邊框 */
+  cursor: pointer; /* 添加光標指示 */
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  opacity: 0.7;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.right_btn {
+  background-image: url(right-arrow.png);
+  background-repeat: no-repeat; /* 禁止背景圖片重複 */
+  background-position: center; 
+  background-color: transparent; 
+  border: none; /* 移除按鈕邊框 */
+  cursor: pointer; /* 添加光標指示 */  
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  opacity: 0.7;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.right_btn:hover, .left_btn:hover{
+  opacity: 1;
+}
+
+.dots {
+  display: flex;
+  position: absolute;
+  bottom: 10px;
+  z-index: 1;
+  opacity: 0.6;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: 0 4px;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+
+.dot.active {
+  background-color: #000;
 }
 
 .profile {
   padding: 0 15px 0;
   width: 600px;
+}
+
+.profile-title {
+  /* Header 3 - Blod 24(24) */
+  font-family: Noto Sans TC;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px; /* 100% */
+  margin-bottom: 15px;
+}
+
+.profile-describe {
+  font-weight: 500;
+}
+
+.booking-form {
+  border-radius: 5px;
+  background: var(--secondary-color-gray-20, #E8E8E8);
+  width: 100%;
+  height: 302px;
+}
+
+.product-text {
+  margin: 0 20px;
+}
+
+.select-date {
+  display: flex;
+  align-items: center;
+  margin: 0 20px;
+}
+
+.calender{
+  margin-left: 5px;   
+  height: 35px;
+  width: 193px;
+  border: none;
+}
+
+.select-session {
+  display: flex;
+  align-items: center;
+  margin: 0 20px;
+}
+
+.product-fee {
+  display: flex;
+  align-items: center;
+  margin: 0 20px;
+}
+
+.booking-button {
+  background-color: #4CAF50; /* 背景顏色 */
+  border: none; /* 移除邊框 */
+  color: white; /* 文字顏色 */
+  padding: 10px 20px; /* 內邊距 */
+  text-align: center; /* 文字置中 */
+  text-decoration: none; /* 移除文字底線 */
+  display: inline-block; /* 行內元素 */
+  font-size: 16px; /* 文字大小 */
+  cursor: pointer; /* 游標樣式 */
+  border-radius: 4px; /* 圓角 */
+  transition: background-color 0.3s ease; /* 按鈕漸變效果 */
+  margin: 0 20px;
+
+  /* 滑鼠懸停時的效果 */
+  &:hover {
+    background-color: #45a049;
+  }
+
+  /* 按下按鈕時的效果 */
+  &:active {
+    background-color: #3e8e41;
+  }
 }
 
 .infors {
