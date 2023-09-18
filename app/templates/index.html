@@ -82,10 +82,13 @@
       });
     };
 
-    const createAttration = (name, imgSrc, mrt, category) => {
+    const createAttration = (name, imgSrc, mrt, category, id_value) => {
       // 創建 attration 元素
       const attration = document.createElement('div');
       attration.classList.add('attration');
+      attration.addEventListener('click', () => {
+        window.open(`http://52.52.144.73:3000/attraction/${id_value}`, '_blank');
+      });
 
       // 創建 attration-img 元素
       const attrationImg = document.createElement('div');
@@ -96,6 +99,7 @@
       attrationFile.classList.add('attration-file');
       attrationFile.src = imgSrc;
       attrationFile.alt = '';
+      // attrationFile.onclick(`http://52.52.144.73:3000/api/attraction/${id_value}`)
       attrationImg.appendChild(attrationFile);
 
       // 創建 attration-name 元素
@@ -138,7 +142,7 @@
     const createMrt = (name) => {
         // 創建 span 元素
         const span = document.createElement('span');
-        span.classList.add('mid-container-list-listitem');
+        span.classList.add('mid-container-list-item');
         span.textContent = name;
         span.addEventListener('click', () => {
           const input = document.querySelector('.search-input');
@@ -178,7 +182,7 @@
       const data = await response.json();
       const dataList = data.data;
       for (let item of dataList) {
-        createAttration(item.name, item.images[0], item.mrt, item.category)
+        createAttration(item.name, item.images[0], item.mrt, item.category, item.id)
       }
       if (dataList.length === 0) {
         const attractionsGroup = document.querySelector('.attractions-group');
@@ -199,7 +203,7 @@
       const data = await response.json();
       const dataList = data.data;
       for (let item of dataList) {
-        createAttration(item.name, item.images[0], item.mrt, item.category)
+        createAttration(item.name, item.images[0], item.mrt, item.category, item.id)
       }
       isComposing = false;
       return data;

@@ -181,7 +181,7 @@ main {
   overflow: hidden;
   white-space: nowrap;}
 
-.mid-container-list-listitem {
+.mid-container-list-item {
   display: flex;
   padding: 5px 15px;
   align-items: flex-start;
@@ -194,6 +194,13 @@ main {
   font-size: 16px;
   font-weight: 500;
   line-height: 13.3px; /* 83.125% */
+
+  cursor: pointer;
+  transition: background-color 0.3s; /* 添加過渡效果 */
+}
+
+.mid-container-list-item:hover {
+  background-color: #f0f0f0; /* 設置醒目的背景顏色 */
 }
 
 .left-container {
@@ -285,6 +292,13 @@ main {
   text-align: right;
   font-size: 16px;
   font-weight: 500;
+
+  cursor: pointer;
+  transition: box-shadow 0.3s; /* 添加過渡效果 */
+}
+
+.attration:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* 添加點亮的陰影效果 */
 }
 
 .attration-img {
@@ -412,6 +426,7 @@ header {
   overflow: hidden;
   max-width: 540px;
   position: relative;
+  transition: transform 0.5s ease;
 }
 
 .slide img {
@@ -420,7 +435,7 @@ header {
   height: 406px;
 }
 
-.left_btn {
+.attraction-prev-button {
   background-image: url(left-arrow.png);
   background-repeat: no-repeat; /* 禁止背景圖片重複 */
   background-position: center; 
@@ -437,7 +452,7 @@ header {
   transform: translateY(-50%);
 }
 
-.right_btn {
+.attraction-next-button {
   background-image: url(right-arrow.png);
   background-repeat: no-repeat; /* 禁止背景圖片重複 */
   background-position: center; 
@@ -454,7 +469,7 @@ header {
   transform: translateY(-50%);
 }
 
-.right_btn:hover, .left_btn:hover{
+.attraction-next-button:hover, .attraction-prev-button:hover{
   opacity: 1;
 }
 
@@ -661,6 +676,7 @@ header {
 
   .attration-file {
     height: 235px;
+    cursor: pointer;
   }
 
   .attration-name {

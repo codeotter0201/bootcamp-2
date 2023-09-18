@@ -23,8 +23,8 @@
   <section class="product" id="{{ id_value }}">
     <div id="carousel">
       <div class="slides">
-        <button class="left_btn" onclick=""></button>
-        <button class="right_btn" onclick=""></button>
+        <button class="attraction-prev-button" onclick=""></button>
+        <button class="attraction-next-button" onclick=""></button>
         <div class="dots"></div>
       </div>
     </div>
@@ -43,13 +43,13 @@
         </div>
         <div class="select-session">
           <p><b>選擇時間：</b></p>
-          <input type="radio" id="optionA" name="option" value="A" required>
+          <input type="radio" id="optionA" name="option" value="A" checked>
           <label for="optionA">上半天</label>
           <input type="radio" id="optionB" name="option" value="B" required>
           <label for="optionB">下半天</label>
         </div>
         <div class="product-fee">
-          <p><b>導覽費用：</b></p>
+          <p><b>導覽費用：</b>新台幣 2000 元</p>
         </div>
         <button class="booking-button">開始預約行程</button>
       </div>
@@ -73,73 +73,190 @@
     <div class="footer">COPYRIGHT © 2021 台北一日遊</div>
 
     <script>
-      // function createImages(urls) {
-      //   const slidesContainer = document.querySelector('.slides');
-      //   const dotsContainer = document.querySelector('.dots');
-      //   urls.forEach(img => {
-      //     const slide = document.createElement('div');
-      //     slide.classList.add('slide');
-      //     slide.innerHTML = `<img src="${img}" alt="Slide">`;
-      //     slidesContainer.appendChild(slide);
-          
-      //     const dot = document.createElement('p');
-      //     dot.innerHTML = "<p>0<\p>"
-      //     dotsContainer.appendChild(dot);
-      //   });
-      // };
+      class ImageSlider {
+        constructor(images) {
+          this.images = images;
+          this.currentIndex = 0;
+          this.slidesContainer = document.querySelector('.slides');
+          this.dotsContainer = document.querySelector('.dots');
+          this.prevButton = document.querySelector('.attraction-prev-button');
+          this.nextButton = document.querySelector('.attraction-next-button');
 
-      function createImages(urls) {
-        const slidesContainer = document.querySelector('.slides');
-        const dotsContainer = document.querySelector('.dots');
-        const slides = [];
-        const dots = [];
-
-        urls.forEach((img, index) => {
-          const slide = document.createElement('div');
-          slide.classList.add('slide');
-          slide.innerHTML = `<img src="${img}" alt="Slide">`;
-          slidesContainer.appendChild(slide);
-          slides.push(slide);
-
-          const dot = document.createElement('div');
-          dot.classList.add('dot');
-          dot.addEventListener('click', () => {
-            showSlide(index);
-          });
-          dotsContainer.appendChild(dot);
-          dots.push(dot);
-        });
-
-        // 有動畫效果，但是會破圖
-        // function showSlide(index) {
-        //   const slideWidth = slides[0].offsetWidth;
-        //   slidesContainer.style.transform = `translateX(-${slideWidth * index}px)`;
-
-        //   slides.forEach((slide, i) => {
-        //     if (i === index) {
-        //       slide.style.display = 'block';
-        //       dots[i].classList.add('active');
-        //     } else {
-        //       slide.style.display = 'none';
-        //       dots[i].classList.remove('active');
-        //     }
-        //   });
-        // }
-
-        function showSlide(index) {
-          slides.forEach((slide, i) => {
-            if (i === index) {
-              slide.style.display = 'block';
-              dots[i].classList.add('active');
-            } else {
-              slide.style.display = 'none';
-              dots[i].classList.remove('active');
-            }
-          });
+          this.generateDots();
+          this.prevButton.addEventListener('click', this.prevImage.bind(this));
+          this.nextButton.addEventListener('click', this.nextImage.bind(this));
+          const dots = this.dotsContainer.getElementsByTagName('span');
+          for (let i = 0; i < dots.length; i++) {
+            dots[i].addEventListener('click', () => {
+              this.changeImage(i);
+            });
+          }
+          this.showCurrentImage();
         }
 
-        showSlide(0);
-      };
+        generateDots() {
+          for (let i = 0; i < this.images.length; i++) {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            this.dotsContainer.appendChild(dot);
+          }
+        }
+
+        updateDots() {
+          const dots = this.dotsContainer.getElementsByTagName('span');
+          for (let i = 0; i < dots.length; i++) {
+            if (i === this.currentIndex) {
+              dots[i].classList.add('active');
+            } else {
+              dots[i].classList.remove('active');
+            }
+          }
+        }
+
+        // createImage(index) {
+        //   const slide = document.createElement('div');
+        //   slide.classList.add('slide');
+        //   slide.innerHTML = `<img src="${this.images[index]}" alt="Slide">`;
+        //   this.slidesContainer.appendChild(slide);
+        // }
+
+        showCurrentImage() {
+          const slides = document.getElementsByClassName('slide');
+          for (let i = 0; i < slides.length; i++) {
+            if (i === this.currentIndex) {
+              slides[i].style.display = 'block';
+            } else {
+              slides[i].style.display = 'none';
+            }
+          }
+          this.updateDots();
+        }
+
+        prevImage() {
+          this.currentIndex--;
+          if (this.currentIndex < 0) {
+            this.currentIndex = this.images.length - 1;
+          }
+          this.showCurrentImage();
+        }
+
+        nextImage() {
+          this.currentIndex++;
+          if (this.currentIndex >= this.images.length) {
+            this.currentIndex = 0;
+          }
+          this.showCurrentImage();
+        }
+
+        changeImage(index) {
+          if (index >= 0 && index < this.images.length) {
+            this.currentIndex = index;
+            this.showCurrentImage();
+          }
+        }
+      }
+      // class ImageSlider {
+      //   constructor(images) {
+      //     this.images = images;
+      //     this.stateImages = images;
+      //     this.currentIndex = 0;
+      //     this.slidesContainer = document.querySelector('.slides');
+      //     this.dotsContainer = document.querySelector('.dots');
+      //     this.prevButton = document.querySelector('.attraction-prev-button');
+      //     this.nextButton = document.querySelector('.attraction-next-button');
+
+      //     this.generateDots();
+      //     this.prevButton.addEventListener('click', this.prevImage.bind(this));
+      //     this.nextButton.addEventListener('click', this.nextImage.bind(this));
+      //     for (let i = 0; i < this.images.length; i++) {
+      //       this.createImage(i);
+      //     }
+      //   }
+
+      //   generateDots() {
+      //     for (let i = 0; i < this.images.length; i++) {
+      //       const dot = document.createElement('span');
+      //       dot.classList.add('dot');
+      //       dot.addEventListener('click', () => {
+      //         this.changeImage(i);
+      //       });
+      //       this.dotsContainer.appendChild(dot);
+      //     }
+      //     this.updateDots();
+      //   }
+
+      //   updateDots() {
+      //     const dots = this.dotsContainer.getElementsByTagName('span');
+      //     for (let i = 0; i < dots.length; i++) {
+      //       if (i === this.currentIndex) {
+      //         dots[i].classList.add('active');
+      //       } else {
+      //         dots[i].classList.remove('active');
+      //       }
+      //     }
+      //     const slides = document.getElementsByClassName('slide');
+      //     const slideSrcList  = [];
+
+      //     for (let i = 0; i < slides.length; i++) {
+      //       const img = slides[i].querySelector('img');
+      //       const src = img.getAttribute('src');
+      //       slideSrcList.push(src);
+      //     }
+
+      //     console.log(slideSrcList );
+      //   }
+
+      //   createImage(index) {
+      //     const slide = document.createElement('div');
+      //     slide.classList.add('slide');
+      //     slide.innerHTML = `<img src="${this.images[index]}" alt="Slide">`;
+      //     this.slidesContainer.appendChild(slide);
+      //   }
+
+      //   changeImage(index) {
+      //     if (index >= 0 && index < this.images.length) {
+      //       this.currentIndex = index;
+      //       this.updateDots();
+      //       // 更新圖片顯示
+      //       // your code here
+      //       const slides = document.getElementsByClassName('slide');
+      //     }
+      //   }
+
+      //   prevImage() {
+      //     this.currentIndex--;
+      //     if (this.currentIndex < 0) {
+      //       this.currentIndex = this.images.length - 1;
+      //     }
+      //     this.updateDots();
+      //     // 更新圖片顯示
+      //     const slides = document.getElementsByClassName('slide');
+      //     const lastSlide = slides[slides.length - 1];
+      //     this.slidesContainer.removeChild(lastSlide);
+
+      //     const newSlide = document.createElement('div');
+      //     newSlide.classList.add('slide');
+      //     newSlide.innerHTML = `<img src="${this.images[this.currentIndex]}" alt="Slide">`;
+      //     this.slidesContainer.insertBefore(newSlide, slides[0]);
+      //   }
+
+      //   nextImage() {
+      //     this.currentIndex++;
+      //     if (this.currentIndex >= this.images.length) {
+      //       this.currentIndex = 0;
+      //     }
+      //     this.updateDots();
+      //     // 更新圖片顯示
+      //     const slides = document.getElementsByClassName('slide');
+      //     const lastSlide = slides[slides.length - 1];
+      //     this.slidesContainer.removeChild(lastSlide);
+
+      //     const newSlide = document.createElement('div');
+      //     newSlide.classList.add('slide');
+      //     newSlide.innerHTML = `<img src="${this.images[this.currentIndex]}" alt="Slide">`;
+      //     this.slidesContainer.insertBefore(newSlide, slides[0]);
+      //   }
+      // }
 
       async function createAttractionById(id_value) {
         isComposing = true;
@@ -149,15 +266,16 @@
         return data;
       };
 
+      
       const productId = document.querySelector(".product").id;
-      // console.log(productId);
 
-      createAttractionById(1)
+      createAttractionById(3)
         .then(data => {
           const attraction_data = data.data;
           console.log(attraction_data);
+          const slider = new ImageSlider(attraction_data.images);
 
-          createImages(attraction_data.images);
+          // createImages(attraction_data.images);
 
           const profileTitleElement = document.querySelector(".profile-title");
           profileTitleElement.innerHTML = attraction_data.name;
@@ -178,7 +296,24 @@
           console.error(error);
         });
 
-      // console.log(createAttractionsByPage(2))
 
+        const optionA = document.getElementById('optionA');
+          const optionB = document.getElementById('optionB');
+          const productFee = document.querySelector('.product-fee');
+
+          optionA.addEventListener('change', (event) => {
+            if (event.target.checked) {
+              productFee.innerHTML = '<p><b>導覽費用：</b>新台幣 2000 元</p>';
+            }
+          });
+
+          optionB.addEventListener('change', (event) => {
+            if (event.target.checked) {
+              productFee.innerHTML = '<p><b>導覽費用：</b>新台幣 2500 元</p>';
+            }
+          });
+      // 使用方式
+      const images = ['1.jpg', '2.jpg', '3.jpg'];
+      
     </script>
   </body>
