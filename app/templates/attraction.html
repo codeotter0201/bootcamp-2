@@ -33,25 +33,25 @@
       <div class="profile-title"></div>
       <div class="profile-describe"></div>
       <div class="booking-form">
-        <div class="product-text">
-          <p><b>訂購導覽行程</b></p>
-          <p>以此景點為中心的一日行程，帶您探索城市角落故事</p>
-        </div>
+        <div><b>訂購導覽行程：</b></div>
+        <div>以此景點為中心的一日行程，帶您探索城市角落故事</div>
         <div class="select-date">
-          <p><b>選擇日期：</b></p>
+          <b>選擇日期：</b>
           <input type="date" class="calendar" id="date" placeholder="yyyy" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY/MM/DD" required><br>
         </div>
         <div class="select-session">
-          <p><b>選擇時間：</b></p>
+          <b>選擇時間：</b>
           <input type="radio" id="optionA" name="option" value="A" checked>
           <label for="optionA">上半天</label>
           <input type="radio" id="optionB" name="option" value="B" required>
           <label for="optionB">下半天</label>
         </div>
         <div class="product-fee">
-          <p><b>導覽費用：</b>新台幣 2000 元</p>
+          <b>導覽費用：</b>新台幣 2000 元
         </div>
-        <button class="booking-button">開始預約行程</button>
+        <div class="booking-button">
+          <button>開始預約行程</button>
+        </div>
       </div>
     </div>
   </section>
@@ -195,13 +195,13 @@
 
       optionA.addEventListener('change', (event) => {
         if (event.target.checked) {
-          productFee.innerHTML = '<p><b>導覽費用：</b>新台幣 2000 元</p>';
+          productFee.innerHTML = '<b>導覽費用：</b>新台幣 2000 元';
         }
       });
 
       optionB.addEventListener('change', (event) => {
         if (event.target.checked) {
-          productFee.innerHTML = '<p><b>導覽費用：</b>新台幣 2500 元</p>';
+          productFee.innerHTML = '<b>導覽費用：</b>新台幣 2500 元';
         }
       });
 
