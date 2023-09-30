@@ -16,10 +16,38 @@
       </a>
       <div class="right">
         <a href="" class="menu-item">預定行程</a>
-        <a href="" class="menu-item">登入/註冊</a>
+        <!-- <a class="menu-item" onclick="openPopup('signup')">登入/註冊</a> -->
+        <button class="button" onclick="openPopup('signup')">Sign Up</button>
       </div>
     </div>
   </header>
+
+  <div id="signup-popup" class="popup">
+    <div class="popup-content">
+      <span class="close" onclick="closePopup('signup')">&times;</span>
+      <h2>Sign Up</h2>
+      <!-- Add your sign-up form fields here -->
+      <form>
+        <input type="text" placeholder="Username"><br>
+        <input type="email" placeholder="Email"><br>
+        <input type="password" placeholder="Password"><br>
+        <button type="submit">Sign Up</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="signin-popup" class="popup">
+    <div class="popup-content">
+      <span class="close" onclick="closePopup('signin')">&times;</span>
+      <h2>Sign In</h2>
+      <!-- Add your sign-in form fields here -->
+      <form>
+        <input type="text" placeholder="Username"><br>
+        <input type="password" placeholder="Password"><br>
+        <button type="submit">Sign In</button>
+      </form>
+    </div>
+  </div>
 
   <section>
     <div class="welcome">
@@ -43,7 +71,7 @@
       <span class="left-container">
         <button class="left-arrow" onclick="moveLeft()"></button>
       </span>
-        
+
       <span class="mid-container">
         <div class="mid-container-list"></div>
       </span>
@@ -60,7 +88,7 @@
     <div class="footer">COPYRIGHT © 2021 台北一日遊</div>
   </main>
 
-  
+
   <script>
     const moveLeft = () => {
       const midContainerList = document.querySelector('.mid-container-list');
@@ -211,7 +239,7 @@
 
     function handleIntersection(entries) {
       const searchInput = document.querySelector('.search-input');
-      
+
       if (searchInput.value || isComposing) {
         return;
       }
@@ -232,6 +260,16 @@
 
     fetchhMrts();
 
+
+    function openPopup(popupId) {
+      const popup = document.getElementById(popupId + '-popup');
+      popup.style.display = 'flex';
+    }
+
+    function closePopup(popupId) {
+      const popup = document.getElementById(popupId + '-popup');
+      popup.style.display = 'none';
+    }
   </script>
 </body>
 

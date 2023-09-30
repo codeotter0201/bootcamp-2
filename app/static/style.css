@@ -25,6 +25,20 @@ main {
 
 /* header-part */
 
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  display: none;
+}
+
 .desktop {
   position: sticky;
   top:0;
@@ -189,7 +203,7 @@ main {
 
   color: #666;
   text-align: center;
-  
+
   /* Body - Med 16(13.3) */
   font-size: 16px;
   font-weight: 500;
@@ -222,8 +236,8 @@ main {
 .left-arrow {
   background-image: url('../static/left-arrow.png'); /* 設置按鈕的背景圖片 */
   background-repeat: no-repeat; /* 禁止背景圖片重複 */
-  background-position: center; 
-  background-color: transparent; 
+  background-position: center;
+  background-color: transparent;
   border: none; /* 移除按鈕邊框 */
   cursor: pointer; /* 添加光標指示 */
   width: 32px;
@@ -239,8 +253,8 @@ main {
 .right-arrow {
   background-image: url('../static/right-arrow.png'); /* 設置按鈕的背景圖片 */
   background-repeat: no-repeat; /* 禁止背景圖片重複 */
-  background-position: center; 
-  background-color: transparent; 
+  background-position: center;
+  background-color: transparent;
   border: none; /* 移除按鈕邊框 */
   cursor: pointer; /* 添加光標指示 */
   width: 32px;
@@ -316,7 +330,7 @@ main {
 
   padding: 10px;
   max-width: 270px;
-  
+
   bottom: 0px;
   height: 20px;
   width: 250px;
@@ -379,6 +393,7 @@ main {
 
   color: var(--additional-color-white, #FFF);
   font-size: 16px;
+
   font-weight: 700;
 }
 
@@ -441,8 +456,8 @@ header {
 .attraction-prev-button {
   background-image: url(left-arrow.png);
   background-repeat: no-repeat; /* 禁止背景圖片重複 */
-  background-position: center; 
-  background-color: transparent; 
+  background-position: center;
+  background-color: transparent;
   border: none; /* 移除按鈕邊框 */
   cursor: pointer; /* 添加光標指示 */
   z-index: 1;
@@ -458,10 +473,10 @@ header {
 .attraction-next-button {
   background-image: url(right-arrow.png);
   background-repeat: no-repeat; /* 禁止背景圖片重複 */
-  background-position: center; 
-  background-color: transparent; 
+  background-position: center;
+  background-color: transparent;
   border: none; /* 移除按鈕邊框 */
-  cursor: pointer; /* 添加光標指示 */  
+  cursor: pointer; /* 添加光標指示 */
   z-index: 1;
   width: 36px;
   height: 36px;
@@ -777,7 +792,7 @@ input[type="radio"]:checked {
   .attration-info div:nth-child(1) {
     width: 150px;
   }
-  
+
   .attration-info div:nth-child(2) {
     width: 150px;
   }
