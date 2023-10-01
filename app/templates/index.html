@@ -15,39 +15,43 @@
         <span class="title">台北一日遊</span>
       </a>
       <div class="right">
-        <a href="" class="menu-item">預定行程</a>
-        <!-- <a class="menu-item" onclick="openPopup('signup')">登入/註冊</a> -->
-        <button class="button" onclick="openPopup('signup')">Sign Up</button>
+        <a href="#" class="menu-item">預定行程</a>
+        <a href="#" class="menu-item" onclick="openPopup('signin')">登入/註冊</a>
       </div>
     </div>
+
+    <div class="signup-overlay">
+      <div class="popup-bar"></div>
+      <div class="signup">
+        <button class="close" onclick="closePopup('signup')">X</button>
+        <div class="pop-bar"></div>
+        <div class="pop-group">
+          <h3>註冊會員帳號</h3>
+          <input type="text" placeholder="輸入姓名"><br>
+          <input type="text" placeholder="輸入電子郵件"><br>
+          <input type="password" placeholder="輸入密碼"><br>
+          <button class="signup-btn" onclick="">註冊新帳戶</button><br>
+          <p>已經有帳戶了?<a href="#" onclick="closePopup('signup'); openPopup('signin');">點此登入</a></p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="signin-overlay">
+      <div class="popup-bar"></div>
+      <div class="signin">
+        <button class="close" onclick="closePopup('signin')">X</button>
+        <div class="pop-bar"></div>
+        <div class="pop-group">
+          <h3>登入會員帳號</h3>
+          <input type="text" placeholder="輸入電子郵件"><br>
+          <input type="password" placeholder="輸入密碼"><br>
+          <button class="signin-btn" onclick="">登入帳戶</button><br>
+          <p>還沒有帳戶?<a href="#" onclick="closePopup('signin'); openPopup('signup');">點此註冊</a></p>
+        </div>
+      </div>
+    </div>
+  
   </header>
-
-  <div id="signup-popup" class="popup">
-    <div class="popup-content">
-      <span class="close" onclick="closePopup('signup')">&times;</span>
-      <h2>Sign Up</h2>
-      <!-- Add your sign-up form fields here -->
-      <form>
-        <input type="text" placeholder="Username"><br>
-        <input type="email" placeholder="Email"><br>
-        <input type="password" placeholder="Password"><br>
-        <button type="submit">Sign Up</button>
-      </form>
-    </div>
-  </div>
-
-  <div id="signin-popup" class="popup">
-    <div class="popup-content">
-      <span class="close" onclick="closePopup('signin')">&times;</span>
-      <h2>Sign In</h2>
-      <!-- Add your sign-in form fields here -->
-      <form>
-        <input type="text" placeholder="Username"><br>
-        <input type="password" placeholder="Password"><br>
-        <button type="submit">Sign In</button>
-      </form>
-    </div>
-  </div>
 
   <section>
     <div class="welcome">
@@ -261,15 +265,70 @@
     fetchhMrts();
 
 
-    function openPopup(popupId) {
-      const popup = document.getElementById(popupId + '-popup');
-      popup.style.display = 'flex';
+    function openPopup(kind) {
+      const overlay = document.getElementsByClassName(kind + "-overlay")[0];
+      overlay.style.display = 'flex';
     }
 
-    function closePopup(popupId) {
-      const popup = document.getElementById(popupId + '-popup');
-      popup.style.display = 'none';
+    function closePopup(kind) {
+      const overlay = document.getElementsByClassName(kind+"-overlay")[0];
+      overlay.style.display = 'none';
     }
+
+    const signin = () => {
+      const emailInput = document.querySelector('input[type="text"]');
+      const passwordInput = document.querySelector('input[type="password"]');
+      const resultParagraph = document.querySelector('.pop-group p');
+
+      fetch('/api/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          email: emailInput.value,
+          password: passwordInput.value
+         })
+      })
+      .then(response => response.json())
+      .then(data => {
+        // 在這裡處理API的回應
+        resultParagraph.textContent = data.result;;
+      })
+      .catch(error => {
+        // 在這裡處理錯誤
+        console.error(error);
+      });
+    };
+
+    const signup = () => {
+      const nameInput = document.querySelector('input[type="text"]:nth-of-type(1)');
+      const emailInput = document.querySelector('input[type="text"]:nth-of-type(2)');
+      const passwordInput = document.querySelector('input[type="password"]');
+      const resultParagraph = document.querySelector('.pop-group p');
+
+      fetch('/api/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          name: nameInput.value,
+          email: emailInput.value,
+          password: passwordInput.value
+         })
+      })
+      .then(response => response.json())
+      .then(data => {
+        // 在這裡處理API的回應
+        resultParagraph.textContent = data.result;;
+      })
+      .catch(error => {
+        // 在這裡處理錯誤
+        console.error(error);
+      });
+    };
+
   </script>
 </body>
 

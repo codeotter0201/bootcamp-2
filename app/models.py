@@ -36,6 +36,14 @@ class AttractionFile(db.Model):
     
     attraction = db.relationship('Attraction', backref=db.backref('files', lazy=True))
 
+class User(db.Model):
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    password = db.Column(db.String(255))
+    email = db.Column(db.String(255))
+
 def clean_data_and_save_to_sql(data:dict):
     pattern = 'https://'
     for spot in data:

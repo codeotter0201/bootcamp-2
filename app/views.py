@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, url_for, jsonify, abort, make_response, Blueprint
 import json
 from .extensions import db
-from .models import Attraction, AttractionFile
+from .models import Attraction, AttractionFile, User
 
 api = Blueprint('api', __name__)
 
@@ -19,6 +19,41 @@ def booking():
 @api.route("/thankyou")
 def thankyou():
 	return render_template("thankyou.html")
+
+@api.route('/api/signin', methods=['POST'])
+def signin():
+    data = request.get_json()
+    email = request.form.get('email')
+    password = request.form.get('password')
+    # 比對資料庫，如果 email 或 password 不正確，回傳 {"result": "帳號或密碼錯誤"}
+    if not User.query.filter_by(email=email, password=password).first():
+        return jsonify(result='帳號或密碼錯誤')
+    # email 與 password 正確，回傳 {"result": "登入成功", "token": "JWT"}
+    else:
+        return jsonify(result='登入成功', token='JWT')
+
+
+@api.route('/api/signup', methods=['POST'])
+def signup():
+    data = request.get_json()
+    name = data.get('name')
+    email = data.get('email')
+    password = data.get('password')
+
+    # 用email檢查資料庫，如果被註冊的帳號已存在，回傳 {"result": "此帳號已被註冊"}
+    if User.query.filter_by(email=email).first():
+         return jsonify(result='此帳號已被註冊')
+    # 將資料存入資料庫
+    new_attraction = User(name=name, email=email, password=password)
+    db.session.add(new_attraction)
+    db.session.commit()
+    return jsonify(result=f'{name} 註冊成功')
+
+@api.route('/api/currentuser', methods=['GET'])
+def current_user(token:str):
+     # 接收前端 JWT 資料，檢查當前是否登入，並且回傳 {"result": "登入成功", "token": "JWT"}
+    return jsonify(result='登入成功', token='JWT')
+
 
 @api.route('/api/attractions', methods=['GET'])
 def get_attractions():
