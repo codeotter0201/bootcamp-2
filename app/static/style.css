@@ -6,7 +6,7 @@
   color: #666;
 }
 
-html{
+html {
   scroll-behavior: smooth;
 }
 
@@ -37,6 +37,10 @@ main {
   align-items: center;
 }
 
+.signup-overlay * {
+  z-index: 999;
+}
+
 .popup-bar {
   width: 340px;
   height: 10px;
@@ -47,6 +51,7 @@ main {
 }
 
 .signup {
+  z-index: 999;
   width: 340px;
   height: 322px;
   background-color: #fff;
@@ -55,14 +60,6 @@ main {
   justify-content: center;
   text-align: center;
   position: relative;
-}
-
-.signup .close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  margin: 0;
-  cursor: pointer;
 }
 
 .signup h3 {
@@ -75,7 +72,8 @@ main {
   font-weight: 700;
 }
 
-.signup input , .signup-btn {
+.signup input,
+.signup-btn {
   width: 280px;
   height: 47px;
   margin-top: 10px;
@@ -109,7 +107,8 @@ main {
   line-height: 16px;
 }
 
-.signup p, .signup a{
+.signup p,
+.signup a {
   margin: 0;
   margin-top: 10px;
 
@@ -136,6 +135,10 @@ main {
   align-items: center;
 }
 
+.signin-overlay * {
+  z-index: 999;
+}
+
 .popup-bar {
   width: 340px;
   height: 10px;
@@ -146,6 +149,7 @@ main {
 }
 
 .signin {
+  z-index: 999;
   width: 340px;
   height: 265px;
   background-color: #fff;
@@ -156,10 +160,18 @@ main {
   position: relative;
 }
 
-.signin .close {
+.signin .close,
+.signup .close {
+  background-image: url(icon_close.png);
+  background-repeat: no-repeat;
+  background-color: #fff;
+  background-position: center;
   position: absolute;
   top: 10px;
   right: 10px;
+  height: 23px;
+  width: 23px;
+  border: none;
   margin: 0;
   cursor: pointer;
 }
@@ -174,7 +186,8 @@ main {
   font-weight: 700;
 }
 
-.signin input , .signin-btn {
+.signin input,
+.signin-btn {
   width: 280px;
   height: 47px;
   margin-top: 10px;
@@ -208,14 +221,15 @@ main {
   line-height: 16px;
 }
 
-.signin p, .signin a{
+.signin p,
+.signin a {
   margin: 0;
   margin-top: 10px;
 
   color: var(--secondary-color-gray-70, #666);
   text-align: center;
   text-decoration: none;
-  
+
   font-family: Noto Sans TC;
   font-size: 16px;
   font-style: normal;
@@ -224,7 +238,7 @@ main {
 
 .desktop {
   position: sticky;
-  top:0;
+  top: 0;
   background-color: #FFF;
   z-index: 1;
   /* height: 54px; */
@@ -244,7 +258,8 @@ main {
   color: var(--primary-color-cyan-70, #489);
   font-size: 30px;
   font-weight: 700;
-  line-height: 34px; /* 113.333% */
+  line-height: 34px;
+  /* 113.333% */
 }
 
 .desktop .navigation .right .menu-item {
@@ -254,7 +269,8 @@ main {
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
-  line-height: 13.3px; /* 83.125% */
+  line-height: 13.3px;
+  /* 83.125% */
 }
 
 /* header-part */
@@ -376,7 +392,8 @@ main {
   flex: 1 0 0;
   align-self: stretch;
   overflow: hidden;
-  white-space: nowrap;}
+  white-space: nowrap;
+}
 
 .mid-container-list-item {
   display: flex;
@@ -390,14 +407,17 @@ main {
   /* Body - Med 16(13.3) */
   font-size: 16px;
   font-weight: 500;
-  line-height: 13.3px; /* 83.125% */
+  line-height: 13.3px;
+  /* 83.125% */
 
   cursor: pointer;
-  transition: background-color 0.3s; /* 添加過渡效果 */
+  transition: background-color 0.3s;
+  /* 添加過渡效果 */
 }
 
 .mid-container-list-item:hover {
-  background-color: #f0f0f0; /* 設置醒目的背景顏色 */
+  background-color: #f0f0f0;
+  /* 設置醒目的背景顏色 */
 }
 
 .left-container {
@@ -417,12 +437,16 @@ main {
 }
 
 .left-arrow {
-  background-image: url('../static/left-arrow.png'); /* 設置按鈕的背景圖片 */
-  background-repeat: no-repeat; /* 禁止背景圖片重複 */
+  background-image: url('../static/left-arrow.png');
+  /* 設置按鈕的背景圖片 */
+  background-repeat: no-repeat;
+  /* 禁止背景圖片重複 */
   background-position: center;
   background-color: transparent;
-  border: none; /* 移除按鈕邊框 */
-  cursor: pointer; /* 添加光標指示 */
+  border: none;
+  /* 移除按鈕邊框 */
+  cursor: pointer;
+  /* 添加光標指示 */
   width: 32px;
   height: 32px;
   padding: 0;
@@ -430,16 +454,21 @@ main {
 }
 
 .left-arrow:hover {
-  background-image: url('../static/left-arrow-hovered.png'); /* 設置 hover 樣式的背景圖片 */
+  background-image: url('../static/left-arrow-hovered.png');
+  /* 設置 hover 樣式的背景圖片 */
 }
 
 .right-arrow {
-  background-image: url('../static/right-arrow.png'); /* 設置按鈕的背景圖片 */
-  background-repeat: no-repeat; /* 禁止背景圖片重複 */
+  background-image: url('../static/right-arrow.png');
+  /* 設置按鈕的背景圖片 */
+  background-repeat: no-repeat;
+  /* 禁止背景圖片重複 */
   background-position: center;
   background-color: transparent;
-  border: none; /* 移除按鈕邊框 */
-  cursor: pointer; /* 添加光標指示 */
+  border: none;
+  /* 移除按鈕邊框 */
+  cursor: pointer;
+  /* 添加光標指示 */
   width: 32px;
   height: 32px;
   padding: 0;
@@ -448,7 +477,8 @@ main {
 }
 
 .right-arrow:hover {
-  background-image: url('../static/right-arrow-hovered.png'); /* 設置 hover 樣式的背景圖片 */
+  background-image: url('../static/right-arrow-hovered.png');
+  /* 設置 hover 樣式的背景圖片 */
 }
 
 
@@ -491,11 +521,13 @@ main {
   font-weight: 500;
 
   cursor: pointer;
-  transition: box-shadow 0.3s; /* 添加過渡效果 */
+  transition: box-shadow 0.3s;
+  /* 添加過渡效果 */
 }
 
 .attration:hover {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* 添加點亮的陰影效果 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  /* 添加點亮的陰影效果 */
 }
 
 .attration-img {
@@ -637,13 +669,15 @@ header {
 }
 
 .attraction-prev-button {
-  background-image: url(left-arrow.png);
-  background-repeat: no-repeat; /* 禁止背景圖片重複 */
+  background-image: url("left-arrow.png");
+  background-repeat: no-repeat;
+  /* 禁止背景圖片重複 */
   background-position: center;
   background-color: transparent;
-  border: none; /* 移除按鈕邊框 */
-  cursor: pointer; /* 添加光標指示 */
-  z-index: 1;
+  border: none;
+  /* 移除按鈕邊框 */
+  cursor: pointer;
+  /* 添加光標指示 */
   width: 36px;
   height: 36px;
   opacity: 0.7;
@@ -654,13 +688,15 @@ header {
 }
 
 .attraction-next-button {
-  background-image: url(right-arrow.png);
-  background-repeat: no-repeat; /* 禁止背景圖片重複 */
+  background-image: url("right-arrow.png");
+  background-repeat: no-repeat;
+  /* 禁止背景圖片重複 */
   background-position: center;
   background-color: transparent;
-  border: none; /* 移除按鈕邊框 */
-  cursor: pointer; /* 添加光標指示 */
-  z-index: 1;
+  border: none;
+  /* 移除按鈕邊框 */
+  cursor: pointer;
+  /* 添加光標指示 */
   width: 36px;
   height: 36px;
   opacity: 0.7;
@@ -670,7 +706,8 @@ header {
   transform: translateY(-50%);
 }
 
-.attraction-next-button:hover, .attraction-prev-button:hover{
+.attraction-next-button:hover,
+.attraction-prev-button:hover {
   opacity: 1;
 }
 
@@ -709,7 +746,8 @@ header {
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
-  line-height: 24px; /* 100% */
+  line-height: 24px;
+  /* 100% */
   margin-bottom: 15px;
 }
 
@@ -729,7 +767,7 @@ header {
   margin-top: 20px;
 }
 
-.product-text *{
+.product-text * {
   display: flex;
   flex-direction: column;
   row-gap: 15px;
@@ -743,7 +781,7 @@ header {
   /* gap: 5px; */
 }
 
-.calendar{
+.calendar {
   height: 35px;
   width: 193px;
   border: none;
@@ -810,16 +848,25 @@ input[type="radio"]:checked {
   align-items: center;
   width: 154px;
   height: 36px;
-  background-color: #489; /* 背景顏色 */
-  border: none; /* 移除邊框 */
-  color: white; /* 文字顏色 */
-  padding: 10px 20px; /* 內邊距 */
-  text-align: center; /* 文字置中 */
+  background-color: #489;
+  /* 背景顏色 */
+  border: none;
+  /* 移除邊框 */
+  color: white;
+  /* 文字顏色 */
+  padding: 10px 20px;
+  /* 內邊距 */
+  text-align: center;
+  /* 文字置中 */
   /* text-decoration: none; 移除文字底線 */
-  font-size: 19px; /* 文字大小 */
-  cursor: pointer; /* 游標樣式 */
-  border-radius: 5px; /* 圓角 */
-  transition: background-color 0.3s ease; /* 按鈕漸變效果 */
+  font-size: 19px;
+  /* 文字大小 */
+  cursor: pointer;
+  /* 游標樣式 */
+  border-radius: 5px;
+  /* 圓角 */
+  transition: background-color 0.3s ease;
+  /* 按鈕漸變效果 */
 
   /* 滑鼠懸停時的效果 */
   &:hover {
@@ -838,7 +885,7 @@ input[type="radio"]:checked {
   max-width: 1200px;
   width: 100%;
   /* column-gap: 20px; */
-  margin:40px auto 40px;
+  margin: 40px auto 40px;
   padding: 10px;
 }
 
@@ -873,7 +920,7 @@ input[type="radio"]:checked {
     max-width: 768px;
   }
 
-  .list-bar .mid-container{
+  .list-bar .mid-container {
     max-width: 628px;
   }
 
@@ -928,7 +975,7 @@ input[type="radio"]:checked {
     max-width: 360px;
   }
 
-  .list-bar .mid-container{
+  .list-bar .mid-container {
     max-width: 246px;
   }
 
@@ -963,7 +1010,8 @@ input[type="radio"]:checked {
     max-width: 322px;
   }
 
-  .attration-details, .attration-details * {
+  .attration-details,
+  .attration-details * {
     max-width: 322px;
     width: 322px;
   }
@@ -988,7 +1036,7 @@ input[type="radio"]:checked {
     margin-bottom: 20px;
   }
 
-  .slides{
+  .slides {
     display: flex;
     justify-content: center;
     width: 400px;
@@ -1028,4 +1076,5 @@ input[type="radio"]:checked {
   }
 
 }
+
 /* RWD-part */

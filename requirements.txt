@@ -4,3 +4,4 @@ flask_sqlalchemy
 Flask-Migrate
 pymysql
 cryptography
+pyjwt

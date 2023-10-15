@@ -1,57 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap&subset=chinese-traditional" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap&subset=chinese-traditional"
+    rel="stylesheet">
   <title>台北一日遊</title>
   <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
   <link rel="stylesheet" href="../static/style.css">
+  <script src="../static/js/header.js"></script>
 </head>
-<body>
-  <header class="desktop">
-    <div class="navigation">
-      <a href="/" class="left">
-        <span class="title">台北一日遊</span>
-      </a>
-      <div class="right">
-        <a href="#" class="menu-item">預定行程</a>
-        <a href="#" class="menu-item" onclick="openPopup('signin')">登入/註冊</a>
-      </div>
-    </div>
 
-    <div class="signup-overlay">
-      <div class="popup-bar"></div>
-      <div class="signup">
-        <button class="close" onclick="closePopup('signup')">X</button>
-        <div class="pop-bar"></div>
-        <div class="pop-group">
-          <h3>註冊會員帳號</h3>
-          <input type="text" placeholder="輸入姓名"><br>
-          <input type="text" placeholder="輸入電子郵件"><br>
-          <input type="password" placeholder="輸入密碼"><br>
-          <button class="signup-btn" onclick="">註冊新帳戶</button><br>
-          <p>已經有帳戶了?<a href="#" onclick="closePopup('signup'); openPopup('signin');">點此登入</a></p>
-        </div>
-      </div>
-    </div>
-  
-    <div class="signin-overlay">
-      <div class="popup-bar"></div>
-      <div class="signin">
-        <button class="close" onclick="closePopup('signin')">X</button>
-        <div class="pop-bar"></div>
-        <div class="pop-group">
-          <h3>登入會員帳號</h3>
-          <input type="text" placeholder="輸入電子郵件"><br>
-          <input type="password" placeholder="輸入密碼"><br>
-          <button class="signin-btn" onclick="">登入帳戶</button><br>
-          <p>還沒有帳戶?<a href="#" onclick="closePopup('signin'); openPopup('signup');">點此註冊</a></p>
-        </div>
-      </div>
-    </div>
-  
-  </header>
+<body>
+  <header class="desktop"></header>
 
   <section>
     <div class="welcome">
@@ -81,7 +43,7 @@
       </span>
 
       <span class="right-container">
-        <button class="right-arrow", onclick="moveRight()"></button>
+        <button class="right-arrow" , onclick="moveRight()"></button>
       </span>
     </div>
 
@@ -94,6 +56,8 @@
 
 
   <script>
+    const ip_adress = "http://localhost:3000";
+
     const moveLeft = () => {
       const midContainerList = document.querySelector('.mid-container-list');
       const scrollAmount = 100; // Adjust this value as needed
@@ -119,7 +83,7 @@
       const attration = document.createElement('div');
       attration.classList.add('attration');
       attration.addEventListener('click', () => {
-        window.open(`http://52.52.144.73:3000/attraction/${id_value}`, '_blank');
+        window.open(`${ip_adress}/attraction/${id_value}`, '_blank');
       });
 
       // 創建 attration-img 元素
@@ -131,7 +95,7 @@
       attrationFile.classList.add('attration-file');
       attrationFile.src = imgSrc;
       attrationFile.alt = '';
-      // attrationFile.onclick(`http://52.52.144.73:3000/api/attraction/${id_value}`)
+      // attrationFile.onclick(`${ip_adress}/api/attraction/${id_value}`)
       attrationImg.appendChild(attrationFile);
 
       // 創建 attration-name 元素
@@ -172,21 +136,21 @@
     };
 
     const createMrt = (name) => {
-        // 創建 span 元素
-        const span = document.createElement('span');
-        span.classList.add('mid-container-list-item');
-        span.textContent = name;
-        span.addEventListener('click', () => {
-          const input = document.querySelector('.search-input');
-          input.value = name;
-          const container = document.querySelector('.attractions-group');
-          container.innerHTML = '';
-          createAttractionsBySearchingName(name)
-        });
+      // 創建 span 元素
+      const span = document.createElement('span');
+      span.classList.add('mid-container-list-item');
+      span.textContent = name;
+      span.addEventListener('click', () => {
+        const input = document.querySelector('.search-input');
+        input.value = name;
+        const container = document.querySelector('.attractions-group');
+        container.innerHTML = '';
+        createAttractionsBySearchingName(name)
+      });
 
-        // 將 span 元素添加到容器中
-        const container = document.querySelector('.mid-container-list');
-        container.appendChild(span);
+      // 將 span 元素添加到容器中
+      const container = document.querySelector('.mid-container-list');
+      container.appendChild(span);
     };
 
     function searchKeyword() {
@@ -200,7 +164,7 @@
     }
 
     async function fetchhMrts() {
-      const response = await fetch(`http://52.52.144.73:3000/api/mrts`);
+      const response = await fetch(`${ip_adress}/api/mrts`);
       const data = await response.json();
       const dataList = data.data;
       for (let item of dataList) {
@@ -210,7 +174,7 @@
     }
 
     async function createAttractionsBySearchingName(name) {
-      const response = await fetch(`http://52.52.144.73:3000/api/attractions?keyword=${encodeURIComponent(name)}`);
+      const response = await fetch(`${ip_adress}/api/attractions?keyword=${encodeURIComponent(name)}`);
       const data = await response.json();
       const dataList = data.data;
       for (let item of dataList) {
@@ -231,7 +195,7 @@
 
     async function createAttractionsByPage(page) {
       isComposing = true;
-      const response = await fetch(`http://52.52.144.73:3000/api/attractions?page=${page}`);
+      const response = await fetch(`${ip_adress}/api/attractions?page=${page}`);
       const data = await response.json();
       const dataList = data.data;
       for (let item of dataList) {
@@ -250,12 +214,12 @@
 
       if (entries[0].isIntersecting && (nextPage || (nextPage === 0))) {
         createAttractionsByPage(nextPage)
-            .then(data => {
-              nextPage = data.nextPage;
-            })
-            .catch(error => {
-              console.error('Error:', error);
-            });
+          .then(data => {
+            nextPage = data.nextPage;
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
       }
     }
     const observer = new IntersectionObserver(handleIntersection);
@@ -264,70 +228,8 @@
 
     fetchhMrts();
 
-
-    function openPopup(kind) {
-      const overlay = document.getElementsByClassName(kind + "-overlay")[0];
-      overlay.style.display = 'flex';
-    }
-
-    function closePopup(kind) {
-      const overlay = document.getElementsByClassName(kind+"-overlay")[0];
-      overlay.style.display = 'none';
-    }
-
-    const signin = () => {
-      const emailInput = document.querySelector('input[type="text"]');
-      const passwordInput = document.querySelector('input[type="password"]');
-      const resultParagraph = document.querySelector('.pop-group p');
-
-      fetch('/api/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-          email: emailInput.value,
-          password: passwordInput.value
-         })
-      })
-      .then(response => response.json())
-      .then(data => {
-        // 在這裡處理API的回應
-        resultParagraph.textContent = data.result;;
-      })
-      .catch(error => {
-        // 在這裡處理錯誤
-        console.error(error);
-      });
-    };
-
-    const signup = () => {
-      const nameInput = document.querySelector('input[type="text"]:nth-of-type(1)');
-      const emailInput = document.querySelector('input[type="text"]:nth-of-type(2)');
-      const passwordInput = document.querySelector('input[type="password"]');
-      const resultParagraph = document.querySelector('.pop-group p');
-
-      fetch('/api/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-          name: nameInput.value,
-          email: emailInput.value,
-          password: passwordInput.value
-         })
-      })
-      .then(response => response.json())
-      .then(data => {
-        // 在這裡處理API的回應
-        resultParagraph.textContent = data.result;;
-      })
-      .catch(error => {
-        // 在這裡處理錯誤
-        console.error(error);
-      });
-    };
+    // 建立 header
+    createHeader();
 
   </script>
 </body>

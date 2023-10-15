@@ -44,6 +44,13 @@ class User(db.Model):
     password = db.Column(db.String(255))
     email = db.Column(db.String(255))
 
+    def get_json(self):
+        return {
+            'name': self.name,
+            'password': self.password,
+            'email': self.email
+        }
+
 def clean_data_and_save_to_sql(data:dict):
     pattern = 'https://'
     for spot in data:

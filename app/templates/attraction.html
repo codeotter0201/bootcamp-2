@@ -1,25 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap&subset=chinese-traditional" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap&subset=chinese-traditional"
+    rel="stylesheet">
   <title>台北一日遊</title>
-  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
   <link rel="stylesheet" href="../static/style.css">
+  <script src="../static/js/header.js"></script>
 </head>
+
 <body>
-  <header class="desktop">
-    <div class="navigation">
-      <a href="/" class="left">
-        <span class="title">台北一日遊</span>
-      </a>
-      <div class="right">
-        <a href="" class="menu-item">預定行程</a>
-        <a href="" class="menu-item">登入/註冊</a>
-      </div>
-    </div>
-  </header>
+  <header class="desktop"></header>
   <section class="product" id="{{ id_value }}">
     <div id="carousel">
       <div class="slides">
@@ -28,7 +21,7 @@
         <div class="dots"></div>
       </div>
     </div>
-      
+
     <div class="profile">
       <div class="profile-title"></div>
       <div class="profile-describe"></div>
@@ -37,7 +30,8 @@
         <div>以此景點為中心的一日行程，帶您探索城市角落故事</div>
         <div class="select-date">
           <b>選擇日期：</b>
-          <input type="date" class="calendar" id="date" placeholder="yyyy" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY/MM/DD" required><br>
+          <input type="date" class="calendar" id="date" placeholder="yyyy" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+            placeholder="YYYY/MM/DD" required><br>
         </div>
         <div class="select-session">
           <b>選擇時間：</b>
@@ -56,6 +50,7 @@
     </div>
   </section>
   <div class="separator"></div>
+
   <body>
     <div class="infors">
       <div class="infors-content">
@@ -73,6 +68,8 @@
     <div class="footer">COPYRIGHT © 2021 台北一日遊</div>
 
     <script>
+      const ip_adress = "http://localhost:3000";
+
       class ImageSlider {
         constructor(urls) {
           this.imageUrls = urls;
@@ -154,13 +151,13 @@
 
       async function createAttractionDataById(id_value) {
         isComposing = true;
-        const response = await fetch(`http://52.52.144.73:3000/api/attraction/${id_value}`);
+        const response = await fetch(`${ip_adress}/api/attraction/${id_value}`);
         const data = await response.json();
         isComposing = false;
         return data;
       };
 
-      
+
       const productId = document.querySelector(".product").id;
 
       createAttractionDataById(productId)
@@ -187,6 +184,8 @@
           console.error(error);
         });
 
+      // 建立 header
+      createHeader();
 
       // 套裝價格改變
       const optionA = document.getElementById('optionA');
@@ -213,5 +212,7 @@
       // Set the min attribute of the date input
       dateInput.setAttribute('min', today);
 
-</script>
+
+
+    </script>
   </body>
