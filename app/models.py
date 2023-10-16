@@ -51,6 +51,23 @@ class User(db.Model):
             'email': self.email
         }
 
+class Order(db.Model):
+    __tablename__ = 'orders'
+
+    id = db.Column(db.Integer, primary_key=True)
+    attraction_id = db.Column(db.Integer, db.ForeignKey('attractions.id'))
+    email = db.Column(db.String(255))
+    date = db.Column(db.DateTime)
+    session = db.Column(db.String(255))
+
+    def get_json(self):
+        return {
+            'attraction_id': self.attraction_id,
+            'date': self.date,
+            'session': self.session,
+            'email': self.email
+        }
+
 def clean_data_and_save_to_sql(data:dict):
     pattern = 'https://'
     for spot in data:

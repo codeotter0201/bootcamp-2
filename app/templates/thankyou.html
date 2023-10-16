@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap&subset=chinese-traditional"
+    rel="stylesheet">
+  <title>台北一日遊</title>
+  <link rel="stylesheet" href="../static/style.css">
+  <script src="../static/js/header.js"></script>
+</head>
+
+<body>
+  <header class="desktop"></header>
+  <section class="product" id="{{ id_value }}">
+    <div id="carousel">
+      <div class="slides">
+        <button class="attraction-prev-button" onclick=""></button>
+        <button class="attraction-next-button" onclick=""></button>
+        <div class="dots"></div>
+      </div>
+    </div>
+
+    <div class="profile">
+      <div class="profile-title"></div>
+      <div class="profile-describe"></div>
+      <div class="booking-form">
+        <div><b>訂購導覽行程：</b></div>
+        <div>以此景點為中心的一日行程，帶您探索城市角落故事</div>
+        <div class="select-date">
+          <b>選擇日期：</b>
+          <input type="date" class="calendar" id="date" placeholder="yyyy" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+            placeholder="YYYY/MM/DD" required><br>
+        </div>
+        <div class="select-session">
+          <b>選擇時間：</b>
+          <input type="radio" id="optionA" name="option" value="A" checked>
+          <label for="optionA">上半天</label>
+          <input type="radio" id="optionB" name="option" value="B" required>
+          <label for="optionB">下半天</label>
+        </div>
+        <div class="product-fee">
+          <b>導覽費用：</b>新台幣 2000 元
+        </div>
+        <div class="booking-button">
+          <button>開始預約行程</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="separator"></div>
+
+  <body>
+    <div class="infors">
+      <div class="infors-content">
+        <p id="description"></p>
+      </div>
+      <div class="infors-address">
+        <p style="font-weight: 700;">景點地址：</p>
+        <p id="address"></p>
+      </div>
+      <div class="infors-routine">
+        <p style="font-weight: 700;">交通方式：</p>
+        <p id="transportation"></p>
+      </div>
+    </div>
+    <div class="footer">COPYRIGHT © 2021 台北一日遊</div>
+
+    <script>
+      const ip_adress = "http://localhost:3000";
+
+      class ImageSlider {
+        constructor(urls) {
+          this.imageUrls = urls;
+          this.currentIndex = 0;
+          this.slidesContainer = document.querySelector('.slides');
+          this.dotsContainer = document.querySelector('.dots');
+          this.prevButton = document.querySelector('.attraction-prev-button');
+          this.nextButton = document.querySelector('.attraction-next-button');
+
+          for (let i = 0; i < this.imageUrls.length; i++) {
+            this.createDots(i);
+          }
+
+          this.prevButton.addEventListener('click', this.prevImage.bind(this));
+          this.nextButton.addEventListener('click', this.nextImage.bind(this));
+          this.drawCurrentImage();
+        }
+
+        createDots(dotIndex) {
+          const dot = document.createElement('span');
+          dot.classList.add('dot');
+          dot.setAttribute('data-dot-index', dotIndex);
+          dot.addEventListener('click', () => {
+            const clickedDotIndex = parseInt(dot.getAttribute('data-dot-index'));
+            this.drawCurrentImage(clickedDotIndex);
+          });
+          this.dotsContainer.appendChild(dot);
+        }
+
+        drawCurrentImage(dotIndex = null) {
+          if (dotIndex !== null) {
+            this.currentIndex = dotIndex;
+          }
+
+          const imageUrl = this.imageUrls[this.currentIndex];
+
+          const slide = document.createElement('div');
+          slide.classList.add('slide');
+          slide.innerHTML = `<img src="${imageUrl}" alt="Slide">`;
+
+          const existingSlide = this.slidesContainer.querySelector('.slide');
+          if (existingSlide) {
+            this.slidesContainer.replaceChild(slide, existingSlide);
+          } else {
+            this.slidesContainer.appendChild(slide);
+          }
+
+          // 更新 dots 的狀態
+          const dots = this.dotsContainer.querySelectorAll('.dot');
+          dots.forEach((dot) => {
+            const dotIndex = parseInt(dot.getAttribute('data-dot-index'));
+            if (dotIndex === this.currentIndex) {
+              dot.classList.add('active');
+            } else {
+              dot.classList.remove('active');
+            }
+          });
+
+        }
+
+        nextImage() {
+          if (this.currentIndex + 1 >= this.imageUrls.length) {
+            this.currentIndex = 0;
+          } else {
+            this.currentIndex++;
+          }
+          this.drawCurrentImage();
+        }
+
+        prevImage() {
+          if (this.currentIndex - 1 < 0) {
+            this.currentIndex = this.imageUrls.length - 1;
+          } else {
+            this.currentIndex--;
+          }
+          this.drawCurrentImage();
+        }
+      }
+
+      async function createAttractionDataById(id_value) {
+        isComposing = true;
+        const response = await fetch(`${ip_adress}/api/attraction/${id_value}`);
+        const data = await response.json();
+        isComposing = false;
+        return data;
+      };
+
+
+      const productId = document.querySelector(".product").id;
+
+      createAttractionDataById(productId)
+        .then(data => {
+          const attraction_data = data.data;
+          const slider = new ImageSlider(attraction_data.images);
+
+          const profileTitleElement = document.querySelector(".profile-title");
+          profileTitleElement.innerHTML = attraction_data.name;
+
+          const profileDescribeElement = document.querySelector(".profile-describe");
+          profileDescribeElement.innerHTML = attraction_data.category + " at " + attraction_data.mrt;
+
+          const descriptionElement = document.getElementById('description');
+          descriptionElement.innerHTML = attraction_data.description;
+
+          const addressElement = document.getElementById('address');
+          addressElement.innerHTML = attraction_data.address;
+
+          const transportationElement = document.getElementById('transportation');
+          transportationElement.innerHTML = attraction_data.transport;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
+      // 建立 header
+      createHeader();
+
+      // 套裝價格改變
+      const optionA = document.getElementById('optionA');
+      const optionB = document.getElementById('optionB');
+      const productFee = document.querySelector('.product-fee');
+
+      optionA.addEventListener('change', (event) => {
+        if (event.target.checked) {
+          productFee.innerHTML = '<b>導覽費用：</b>新台幣 2000 元';
+        }
+      });
+
+      optionB.addEventListener('change', (event) => {
+        if (event.target.checked) {
+          productFee.innerHTML = '<b>導覽費用：</b>新台幣 2500 元';
+        }
+      });
+
+      const dateInput = document.getElementById('date');
+
+      // Get today's date in the format "yyyy-mm-dd"
+      const today = new Date().toISOString().split('T')[0];
+
+      // Set the min attribute of the date input
+      dateInput.setAttribute('min', today);
+
+
+
+    </script>
+  </body>

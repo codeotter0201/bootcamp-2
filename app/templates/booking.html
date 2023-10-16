@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap&subset=chinese-traditional"
+    rel="stylesheet">
+  <title>台北一日遊</title>
+  <link rel="stylesheet" href="../static/style.css">
+  <script src="../static/js/header.js"></script>
+</head>
+
+<body>
+  <header class="desktop"></header>
+  <div class="booking-body">
+    <div class="separator"></div>
+    <div class="separator"></div>
+  </div>
+  
+  <div class="footer">COPYRIGHT © 2021 台北一日遊</div>
+
+  <script>
+    const ip_adress = "http://localhost:3000";
+
+    // 建立 header
+    createHeader();
+
+    // 建立頁面內容
+    // 如果getCurrentUser() 回傳 false 則導向到 index
+    getCurrentUser()
+    .then(async (result) => {
+      if (!result) {
+        window.location.href = "/";
+      }else{
+        // 用localStorage token get /api/get_order 取得資料
+        // 如果有資料，就在 booking-body 中顯示有資料，如果沒資料，就顯示沒資料
+        const orderResult = await getOrder();
+        const bookingBody = document.querySelector('.booking-body');
+
+        if (typeof orderResult.result === 'string') {
+          bookingBody.innerHTML = `
+              <p> 沒有訂單 </p>
+          `;
+        }else{
+          bookingBody.innerHTML = `
+              <p> 有訂單 </p>
+          `;
+        }
+        
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  </script>
+</body>

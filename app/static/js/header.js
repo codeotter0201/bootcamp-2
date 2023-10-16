@@ -10,7 +10,7 @@ function createHeader() {
           <span class="title">台北一日遊</span>
         </a>
         <div class="right">
-          <a href="#" class="menu-item">預定行程</a>
+          <a href="#" class="menu-item" onclick="openBooking()">預定行程</a>
           <a href="#" class="menu-item" onclick="openPopup('signin')">登入/註冊</a>
         </div>
       </div>
@@ -142,22 +142,68 @@ const signup = () => {
 };
 
 const getCurrentUser = () => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    fetch('/api/currentuser', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-      .then(response => response.json())
-      .then(data => {
-        // 在這裡處理API的回應
-        console.log(data);
-        console.log(token);
-      })
-      .catch(error => {
-        // 在這裡處理錯誤
-        console.error(error);
-      });
-  }
+  return new Promise((resolve, reject) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetch('/api/currentuser', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.email) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          reject(error);
+        });
+    } else {
+      resolve(false);
+    }
+  });
 };
+    
+const getOrder = () => {
+  return new Promise((resolve, reject) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetch('/api/get_order', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          resolve(data);
+        })
+        .catch(error => {
+          console.error(error);
+          reject(error);
+        });
+    } else {
+      resolve(false);
+    }
+  });
+};
+
+
+
+function openBooking() {
+  // 如果 getCurrentUser() 回傳true，導向到/booking，若無則 openPopup("signin")
+  getCurrentUser()
+  .then(result => {
+    if (result) {
+      window.location.href = "/booking"; // Redirect to /booking if result is true
+    } else {
+      openPopup("signin");
+    }
+  })
+  .catch(error => {
+    console.log(error);
+  });
+} 

@@ -12,16 +12,14 @@ from flask import (
 )
 import json
 from .extensions import db
-from .models import Attraction, AttractionFile, User
+from .models import Attraction, AttractionFile, User, Order
 import jwt
 
 api = Blueprint("api", __name__)
 
 
-# Pages
 @api.route("/")
 def index():
-    # url = url_for('template', 'index.html')
     return render_template("index.html")
 
 
@@ -34,10 +32,55 @@ def attraction(id):
 def booking():
     return render_template("booking.html")
 
-
 @api.route("/thankyou")
 def thankyou():
     return render_template("thankyou.html")
+
+
+@api.route("/api/create_order", methods=["POST"])
+def create_order():
+    token = request.headers.get("Authorization").split()[1]
+    user_data = jwt.decode(token, "secret", algorithms=["HS256"])
+    email = user_data.get("email")
+
+    data = request.get_json()
+    attraction_id = data.get("attraction_id")
+    date = data.get("date")
+    session = data.get("session")
+
+    orders = Order.query.filter_by(email=email).all()
+    if orders:
+        for pending_order in orders:
+            db.session.delete(pending_order)
+        db.session.commit()
+
+    order = Order(attraction_id=attraction_id, email=email, date=date, session=session)
+    db.session.add(order)
+    db.session.commit()
+    return jsonify(result="訂購成功")
+
+@api.route("/api/get_order")
+def get_order():
+    token = request.headers.get("Authorization").split()[1]
+    user_data = jwt.decode(token, "secret", algorithms=["HS256"])
+    email = user_data.get("email")
+    order = Order.query.filter_by(email=email).first()
+    if order:
+        return jsonify(result=order.get_json())
+    else:
+        return jsonify(result="無訂單")
+
+
+@api.route("/api/delete_order")
+def delete_order():
+    token = request.headers.get("Authorization").split()[1]
+    user_data = jwt.decode(token, "secret", algorithms=["HS256"])
+    email = user_data.get("email")
+
+    order = Order.query.filter_by(email=email).first()
+    db.session.delete(order)
+    db.session.commit()
+    return jsonify(result="刪除成功")
 
 
 @api.route("/api/signin", methods=["POST"])
@@ -59,14 +102,6 @@ def signin():
         return jsonify(result="登入成功", token=token)
 
 
-@api.route("/api/getuserdata")
-def getuserdata():
-    # get User model all data and return
-    data = User.query.all()
-    data = [i.get_json() for i in data]
-    return jsonify(data)
-
-
 @api.route("/api/signup", methods=["POST"])
 def signup():
     data = request.get_json()
@@ -84,7 +119,7 @@ def signup():
     return jsonify(result=f"{name} 註冊成功")
 
 
-@api.route("/api/currentuser", methods=["GET"])
+@api.route("/api/currentuser")
 def current_user():
     # 接收前端 JWT 資料，檢查當前是否登入，並且回傳 {"id":id, "email":email, "name":user_info.name}
     # 需要驗證會員身份的後端程式,接收到前端請求後,可以從 Authorization Header 取得 Token,並透過解析判斷登入
