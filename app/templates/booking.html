@@ -14,8 +14,10 @@
 <body>
   <header class="desktop"></header>
   <div class="booking-body">
-    <div class="separator"></div>
-    <div class="separator"></div>
+    <div class="ordergreeting"></div>
+    <div class="orderinfo"></div>
+    <!-- <div class="separator"></div> -->
+    <!-- <div class="separator"></div> -->
   </div>
   
   <div class="footer">COPYRIGHT © 2021 台北一日遊</div>
@@ -30,7 +32,7 @@
     // 如果getCurrentUser() 回傳 false 則導向到 index
     getCurrentUser()
     .then(async (result) => {
-      if (!result) {
+      if (!result.email) {
         window.location.href = "/";
       }else{
         // 用localStorage token get /api/get_order 取得資料
@@ -40,11 +42,54 @@
 
         if (typeof orderResult.result === 'string') {
           bookingBody.innerHTML = `
-              <p> 沒有訂單 </p>
+              <div class="ordergreeting">
+                <p> 您好，${result.name}，待預訂的行程如下：</p>
+              </div>
+              <div class="orderinfo">
+                <div class="orderdescribe">
+                  <p> 目前沒有任何待預訂的行程 </p>
+                </div>
+              </div>
           `;
         }else{
-          bookingBody.innerHTML = `
-              <p> 有訂單 </p>
+          const orderinfo= document.querySelector('.orderinfo');
+          const ordergreeting= document.querySelector('.ordergreeting');
+          const attraction_id = orderResult.result.attraction_id;
+          const attraction_info = await fetch(`${ip_adress}/api/attraction/${attraction_id}`);
+          const data = await attraction_info.json();
+          const url = data.data.images[0];
+          const address = data.data.address;
+
+          const dateString = orderResult.result.date;
+          const date = new Date(dateString);
+          const year = date.getFullYear();
+          const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 月份从0开始，所以需要加1，并且保证两位数
+          const day = date.getDate().toString().padStart(2, '0'); // 保证两位数的日期
+          const formattedDate = `${year}-${month}-${day}`;
+
+          let session = "";
+          let fee = "";
+          if(orderResult.result.session === "B"){
+            session = "下午 1 點到下午 4 點";
+            fee = "新台幣 2500 元"
+          }else{
+            session = "早上 9 點到中午 12 點";
+            fee = "新台幣 2000 元"
+          }
+          
+          ordergreeting.innerHTML = `<p>您好，${result.name}，待預訂的行程如下：</p>`
+          orderinfo.innerHTML = `
+            <div class="attraction-img">
+              <img src="${url}" alt="" class="order-pic">
+            </div>
+            <div class="orderdescribe">
+              <p>台北一日遊：${data.data.name}</p>
+              <p>日期：${formattedDate}</p>
+              <p>時間：${session}</p>
+              <p>費用：${fee}</p>
+              <p>地點：${address}</p>
+            </div>
+            <button class="delete-order" onclick="deleteOrder()">刪除</button>
           `;
         }
         

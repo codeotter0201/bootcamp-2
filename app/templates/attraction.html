@@ -44,7 +44,7 @@
           <b>導覽費用：</b>新台幣 2000 元
         </div>
         <div class="booking-button">
-          <button>開始預約行程</button>
+          <button onclick="createOrder()">開始預約行程</button>
         </div>
       </div>
     </div>
@@ -69,6 +69,53 @@
 
     <script>
       const ip_adress = "http://localhost:3000";
+
+      function createOrder() {
+        if (!localStorage.getItem('token')) {
+          openPopup('signin');
+          return;
+        }
+
+        // 调用函数并传递日期和选项的值
+        const selectedDate = document.getElementById('date').value;
+        const selectedOption = document.querySelector('input[name="option"]:checked').value;
+        const attraction_id = document.querySelector('section[id]').id;
+
+        // 检查日期和选项是否都有值
+        if (selectedDate && selectedOption) {
+          // 创建一个包含日期和时间的JSON对象
+          const dataToSend = {
+            date: selectedDate,
+            session: selectedOption,
+            attraction_id: attraction_id,
+          };
+
+          // 将JSON对象转换为字符串
+          const jsonData = JSON.stringify(dataToSend);
+          const token = localStorage.getItem('token');
+
+          // 使用fetch或其他Ajax方法将数据发送到API
+          fetch('/api/create_order', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: jsonData
+          })
+            .then(response => response.json())
+            .then(data => {
+              console.log(data);
+              window.location.href = "/booking";
+            })
+            .catch(error => {
+              console.error('发送数据到API时出错：', error);
+            });
+        } else {
+          console.error('日期和选项不能为空');
+        }
+      }
+
 
       class ImageSlider {
         constructor(urls) {

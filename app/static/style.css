@@ -23,6 +23,44 @@ main {
   margin-bottom: 20px;
 }
 
+/* booking-part */
+.orderinfo{
+  display: flex;
+  justify-content: center;
+  column-gap: 22px;
+}
+
+.ordergreeting p:nth-child(1){
+  color: var(--secondary-color-gray-70, #666);
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 16px; /* 84.211% */
+}
+
+.orderdescribe p{
+  color: var(--secondary-color-gray-70, #666);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 13.3px; /* 84.211% */
+
+  margin-bottom: 10px;
+}
+
+.orderdescribe p:nth-child(1){
+  color: var(--primary-color-cyan-70, #489);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 13.3px; /* 84.211% */
+
+  margin-bottom: 20px;
+}
+
+
+/* booking-part */
+
 /* header-part */
 
 .signup-overlay {

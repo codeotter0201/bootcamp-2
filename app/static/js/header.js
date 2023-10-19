@@ -152,11 +152,7 @@ const getCurrentUser = () => {
         })
         .then(response => response.json())
         .then(data => {
-          if (data.email) {
-            resolve(true);
-          } else {
-            resolve(false);
-          }
+          resolve(data);
         })
         .catch(error => {
           console.error(error);
@@ -190,14 +186,36 @@ const getOrder = () => {
     }
   });
 };
-
-
+    
+const deleteOrder = () => {
+  return new Promise((resolve, reject) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetch('/api/delete_order', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          resolve(data);
+          location.reload();
+        })
+        .catch(error => {
+          console.error(error);
+          reject(error);
+        });
+    } else {
+      resolve(false);
+    }
+  });
+};
 
 function openBooking() {
   // 如果 getCurrentUser() 回傳true，導向到/booking，若無則 openPopup("signin")
   getCurrentUser()
   .then(result => {
-    if (result) {
+    if (result.email) {
       window.location.href = "/booking"; // Redirect to /booking if result is true
     } else {
       openPopup("signin");

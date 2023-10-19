@@ -44,7 +44,8 @@ def create_order():
     email = user_data.get("email")
 
     data = request.get_json()
-    attraction_id = data.get("attraction_id")
+    v = data.get("attraction_id")
+    attraction_id = int(v) if isinstance(v, str) else v
     date = data.get("date")
     session = data.get("session")
 
@@ -77,9 +78,10 @@ def delete_order():
     user_data = jwt.decode(token, "secret", algorithms=["HS256"])
     email = user_data.get("email")
 
-    order = Order.query.filter_by(email=email).first()
-    db.session.delete(order)
-    db.session.commit()
+    orders = Order.query.filter_by(email=email).all() # 刪除本帳號所有 order
+    for order in orders:
+        db.session.delete(order)
+        db.session.commit()
     return jsonify(result="刪除成功")
 
 
