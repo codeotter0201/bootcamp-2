@@ -52,6 +52,7 @@
     </div>
 
     <div class="footer">COPYRIGHT © 2021 台北一日遊</div>
+    <div class="footer-fill"></div>
   </main>
 
 
@@ -83,7 +84,8 @@
       const attration = document.createElement('div');
       attration.classList.add('attration');
       attration.addEventListener('click', () => {
-        window.open(`${ip_adress}/attraction/${id_value}`, '_blank');
+        // window.open(`${ip_adress}/attraction/${id_value}`, '_blank');
+        window.location.href = `${ip_adress}/attraction/${id_value}`;
       });
 
       // 創建 attration-img 元素

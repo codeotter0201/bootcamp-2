@@ -16,11 +16,12 @@
   <div class="booking-body">
     <div class="ordergreeting"></div>
     <div class="orderinfo"></div>
-    <!-- <div class="separator"></div> -->
-    <!-- <div class="separator"></div> -->
   </div>
+  <div class="separator"></div>
+  <div class="separator"></div>
   
   <div class="footer">COPYRIGHT © 2021 台北一日遊</div>
+  <div class="footer-fill"></div>
 
   <script>
     const ip_adress = "http://localhost:3000";
@@ -42,14 +43,14 @@
 
         if (typeof orderResult.result === 'string') {
           bookingBody.innerHTML = `
-              <div class="ordergreeting">
-                <p> 您好，${result.name}，待預訂的行程如下：</p>
-              </div>
-              <div class="orderinfo">
-                <div class="orderdescribe">
-                  <p> 目前沒有任何待預訂的行程 </p>
+                <div class="ordergreeting">
+                  <p> 您好，${result.name}，待預訂的行程如下：</p>
                 </div>
-              </div>
+                <div class="orderinfo">
+                  <div class="orderdescribe">
+                    <p> 目前沒有任何待預訂的行程 </p>
+                  </div>
+                </div>
           `;
         }else{
           const orderinfo= document.querySelector('.orderinfo');
@@ -79,17 +80,17 @@
           
           ordergreeting.innerHTML = `<p>您好，${result.name}，待預訂的行程如下：</p>`
           orderinfo.innerHTML = `
-            <div class="attraction-img">
+            <div class="order-attraction-img">
               <img src="${url}" alt="" class="order-pic">
             </div>
             <div class="orderdescribe">
               <p>台北一日遊：${data.data.name}</p>
-              <p>日期：${formattedDate}</p>
-              <p>時間：${session}</p>
-              <p>費用：${fee}</p>
-              <p>地點：${address}</p>
+              <p><b>日期：</b>${formattedDate}</p>
+              <p><b>時間：</b>${session}</p>
+              <p><b>費用：</b>${fee}</p>
+              <p><b>地點：</b>${address}</p>
             </div>
-            <button class="delete-order" onclick="deleteOrder()">刪除</button>
+            <button class="delete-order" onclick="deleteOrder()"></button>
           `;
         }
         

@@ -12,7 +12,7 @@ html {
 
 body {
   margin: 0;
-}
+  padding: 0;}
 
 a {
   text-decoration: none;
@@ -24,10 +24,41 @@ main {
 }
 
 /* booking-part */
+.booking-body{
+  width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 30px;
+}
+
 .orderinfo{
   display: flex;
-  justify-content: center;
+  position: relative;
   column-gap: 22px;
+}
+
+.delete-order{
+  border: none;
+  background-image: url(icon_delete.png);
+  background-repeat: no-repeat;
+  background-color: #fff;
+  background-position: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+}
+
+.order-attraction-img{
+  padding: 0 8px;
+}
+
+.order-attraction-img img{
+  width:280px;
+  height: 200px;
+  object-fit: cover;
 }
 
 .ordergreeting p:nth-child(1){
@@ -35,7 +66,6 @@ main {
   font-size: 19px;
   font-style: normal;
   font-weight: 700;
-  line-height: 16px; /* 84.211% */
 }
 
 .orderdescribe p{
@@ -43,9 +73,8 @@ main {
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
-  line-height: 13.3px; /* 84.211% */
-
   margin-bottom: 10px;
+  margin-top: 0;
 }
 
 .orderdescribe p:nth-child(1){
@@ -53,8 +82,7 @@ main {
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
-  line-height: 13.3px; /* 84.211% */
-
+  margin-top: 0;
   margin-bottom: 20px;
 }
 
@@ -638,16 +666,29 @@ main {
 .footer {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 104px;
+  min-height: 104px;
+  /* height: 100%; */
   width: 100%;
+
+  padding-top: 40px;
+  margin-top: 40px;
+
+  position: relative;
+  /* bottom: 0; */
 
   background: var(--Gray-700, #757575);
 
   color: var(--additional-color-white, #FFF);
   font-size: 16px;
-
   font-weight: 700;
+}
+
+.footer-fill{
+  background: var(--Gray-700, #757575);
+  width: 100%;
+  height: 100vh;
+  max-height: 530px;
+  position: absolute;
 }
 
 /* attractions-part */
@@ -922,7 +963,6 @@ input[type="radio"]:checked {
   flex-direction: column;
   max-width: 1200px;
   width: 100%;
-  /* column-gap: 20px; */
   margin: 40px auto 40px;
   padding: 10px;
 }
@@ -987,6 +1027,10 @@ input[type="radio"]:checked {
   }
 
   .infors {
+    width: 540px;
+  }
+
+  .booking-body{
     width: 540px;
   }
 
@@ -1092,15 +1136,6 @@ input[type="radio"]:checked {
     height: 390px;
   }
 
-  /* .booking-form {
-    display: flex;
-    flex-direction: column;
-    height: 300px;
-    margin: 0;
-    gap: 15px;
-    padding: 10px;
-  } */
-
   .booking-form {
     width: 300px;
   }
@@ -1111,6 +1146,56 @@ input[type="radio"]:checked {
 
   .infors {
     width: 330px;
+  }
+
+  .booking-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 340px;
+    padding-right: 10px;
+    padding-left: 10px;
+    border: 0;
+    margin: 0;
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .orderinfo {
+    width: 340px;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .ordergreeting p:nth-child(1){
+    margin: 0;
+    margin-top: 40px;
+    margin-bottom: 30px;
+  }
+
+  .order-attraction-img{
+    width: 100%;
+    height: 200px;
+    margin-bottom: 28px;
+    padding: 0;
+  }
+
+  .order-attraction-img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .delete-order{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    top:unset;
+  }
+
+  .orderdescribe{
+    margin-bottom: 20px;
   }
 
 }

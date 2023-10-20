@@ -51,215 +51,216 @@
   </section>
   <div class="separator"></div>
 
-  <body>
-    <div class="infors">
-      <div class="infors-content">
-        <p id="description"></p>
-      </div>
-      <div class="infors-address">
-        <p style="font-weight: 700;">景點地址：</p>
-        <p id="address"></p>
-      </div>
-      <div class="infors-routine">
-        <p style="font-weight: 700;">交通方式：</p>
-        <p id="transportation"></p>
-      </div>
+  <div class="infors">
+    <div class="infors-content">
+      <p id="description"></p>
     </div>
-    <div class="footer">COPYRIGHT © 2021 台北一日遊</div>
+    <div class="infors-address">
+      <p style="font-weight: 700;">景點地址：</p>
+      <p id="address"></p>
+    </div>
+    <div class="infors-routine">
+      <p style="font-weight: 700;">交通方式：</p>
+      <p id="transportation"></p>
+    </div>
+  </div>
+  <div class="footer">COPYRIGHT © 2021 台北一日遊</div>
+  <div class="footer-fill"></div>
+  
 
-    <script>
-      const ip_adress = "http://localhost:3000";
+  <script>
+    const ip_adress = "http://localhost:3000";
 
-      function createOrder() {
-        if (!localStorage.getItem('token')) {
-          openPopup('signin');
-          return;
-        }
-
-        // 调用函数并传递日期和选项的值
-        const selectedDate = document.getElementById('date').value;
-        const selectedOption = document.querySelector('input[name="option"]:checked').value;
-        const attraction_id = document.querySelector('section[id]').id;
-
-        // 检查日期和选项是否都有值
-        if (selectedDate && selectedOption) {
-          // 创建一个包含日期和时间的JSON对象
-          const dataToSend = {
-            date: selectedDate,
-            session: selectedOption,
-            attraction_id: attraction_id,
-          };
-
-          // 将JSON对象转换为字符串
-          const jsonData = JSON.stringify(dataToSend);
-          const token = localStorage.getItem('token');
-
-          // 使用fetch或其他Ajax方法将数据发送到API
-          fetch('/api/create_order', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            },
-            body: jsonData
-          })
-            .then(response => response.json())
-            .then(data => {
-              console.log(data);
-              window.location.href = "/booking";
-            })
-            .catch(error => {
-              console.error('发送数据到API时出错：', error);
-            });
-        } else {
-          console.error('日期和选项不能为空');
-        }
+    function createOrder() {
+      if (!localStorage.getItem('token')) {
+        openPopup('signin');
+        return;
       }
 
+      // 调用函数并传递日期和选项的值
+      const selectedDate = document.getElementById('date').value;
+      const selectedOption = document.querySelector('input[name="option"]:checked').value;
+      const attraction_id = document.querySelector('section[id]').id;
 
-      class ImageSlider {
-        constructor(urls) {
-          this.imageUrls = urls;
-          this.currentIndex = 0;
-          this.slidesContainer = document.querySelector('.slides');
-          this.dotsContainer = document.querySelector('.dots');
-          this.prevButton = document.querySelector('.attraction-prev-button');
-          this.nextButton = document.querySelector('.attraction-next-button');
+      // 检查日期和选项是否都有值
+      if (selectedDate && selectedOption) {
+        // 创建一个包含日期和时间的JSON对象
+        const dataToSend = {
+          date: selectedDate,
+          session: selectedOption,
+          attraction_id: attraction_id,
+        };
 
-          for (let i = 0; i < this.imageUrls.length; i++) {
-            this.createDots(i);
-          }
+        // 将JSON对象转换为字符串
+        const jsonData = JSON.stringify(dataToSend);
+        const token = localStorage.getItem('token');
 
-          this.prevButton.addEventListener('click', this.prevImage.bind(this));
-          this.nextButton.addEventListener('click', this.nextImage.bind(this));
-          this.drawCurrentImage();
-        }
-
-        createDots(dotIndex) {
-          const dot = document.createElement('span');
-          dot.classList.add('dot');
-          dot.setAttribute('data-dot-index', dotIndex);
-          dot.addEventListener('click', () => {
-            const clickedDotIndex = parseInt(dot.getAttribute('data-dot-index'));
-            this.drawCurrentImage(clickedDotIndex);
-          });
-          this.dotsContainer.appendChild(dot);
-        }
-
-        drawCurrentImage(dotIndex = null) {
-          if (dotIndex !== null) {
-            this.currentIndex = dotIndex;
-          }
-
-          const imageUrl = this.imageUrls[this.currentIndex];
-
-          const slide = document.createElement('div');
-          slide.classList.add('slide');
-          slide.innerHTML = `<img src="${imageUrl}" alt="Slide">`;
-
-          const existingSlide = this.slidesContainer.querySelector('.slide');
-          if (existingSlide) {
-            this.slidesContainer.replaceChild(slide, existingSlide);
-          } else {
-            this.slidesContainer.appendChild(slide);
-          }
-
-          // 更新 dots 的狀態
-          const dots = this.dotsContainer.querySelectorAll('.dot');
-          dots.forEach((dot) => {
-            const dotIndex = parseInt(dot.getAttribute('data-dot-index'));
-            if (dotIndex === this.currentIndex) {
-              dot.classList.add('active');
-            } else {
-              dot.classList.remove('active');
-            }
-          });
-
-        }
-
-        nextImage() {
-          if (this.currentIndex + 1 >= this.imageUrls.length) {
-            this.currentIndex = 0;
-          } else {
-            this.currentIndex++;
-          }
-          this.drawCurrentImage();
-        }
-
-        prevImage() {
-          if (this.currentIndex - 1 < 0) {
-            this.currentIndex = this.imageUrls.length - 1;
-          } else {
-            this.currentIndex--;
-          }
-          this.drawCurrentImage();
-        }
-      }
-
-      async function createAttractionDataById(id_value) {
-        isComposing = true;
-        const response = await fetch(`${ip_adress}/api/attraction/${id_value}`);
-        const data = await response.json();
-        isComposing = false;
-        return data;
-      };
-
-
-      const productId = document.querySelector(".product").id;
-
-      createAttractionDataById(productId)
-        .then(data => {
-          const attraction_data = data.data;
-          const slider = new ImageSlider(attraction_data.images);
-
-          const profileTitleElement = document.querySelector(".profile-title");
-          profileTitleElement.innerHTML = attraction_data.name;
-
-          const profileDescribeElement = document.querySelector(".profile-describe");
-          profileDescribeElement.innerHTML = attraction_data.category + " at " + attraction_data.mrt;
-
-          const descriptionElement = document.getElementById('description');
-          descriptionElement.innerHTML = attraction_data.description;
-
-          const addressElement = document.getElementById('address');
-          addressElement.innerHTML = attraction_data.address;
-
-          const transportationElement = document.getElementById('transportation');
-          transportationElement.innerHTML = attraction_data.transport;
+        // 使用fetch或其他Ajax方法将数据发送到API
+        fetch('/api/create_order', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: jsonData
         })
-        .catch(error => {
-          console.error(error);
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            window.location.href = "/booking";
+          })
+          .catch(error => {
+            console.error('发送数据到API时出错：', error);
+          });
+      } else {
+        console.error('日期和选项不能为空');
+      }
+    }
+
+
+    class ImageSlider {
+      constructor(urls) {
+        this.imageUrls = urls;
+        this.currentIndex = 0;
+        this.slidesContainer = document.querySelector('.slides');
+        this.dotsContainer = document.querySelector('.dots');
+        this.prevButton = document.querySelector('.attraction-prev-button');
+        this.nextButton = document.querySelector('.attraction-next-button');
+
+        for (let i = 0; i < this.imageUrls.length; i++) {
+          this.createDots(i);
+        }
+
+        this.prevButton.addEventListener('click', this.prevImage.bind(this));
+        this.nextButton.addEventListener('click', this.nextImage.bind(this));
+        this.drawCurrentImage();
+      }
+
+      createDots(dotIndex) {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        dot.setAttribute('data-dot-index', dotIndex);
+        dot.addEventListener('click', () => {
+          const clickedDotIndex = parseInt(dot.getAttribute('data-dot-index'));
+          this.drawCurrentImage(clickedDotIndex);
+        });
+        this.dotsContainer.appendChild(dot);
+      }
+
+      drawCurrentImage(dotIndex = null) {
+        if (dotIndex !== null) {
+          this.currentIndex = dotIndex;
+        }
+
+        const imageUrl = this.imageUrls[this.currentIndex];
+
+        const slide = document.createElement('div');
+        slide.classList.add('slide');
+        slide.innerHTML = `<img src="${imageUrl}" alt="Slide">`;
+
+        const existingSlide = this.slidesContainer.querySelector('.slide');
+        if (existingSlide) {
+          this.slidesContainer.replaceChild(slide, existingSlide);
+        } else {
+          this.slidesContainer.appendChild(slide);
+        }
+
+        // 更新 dots 的狀態
+        const dots = this.dotsContainer.querySelectorAll('.dot');
+        dots.forEach((dot) => {
+          const dotIndex = parseInt(dot.getAttribute('data-dot-index'));
+          if (dotIndex === this.currentIndex) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
         });
 
-      // 建立 header
-      createHeader();
+      }
 
-      // 套裝價格改變
-      const optionA = document.getElementById('optionA');
-      const optionB = document.getElementById('optionB');
-      const productFee = document.querySelector('.product-fee');
-
-      optionA.addEventListener('change', (event) => {
-        if (event.target.checked) {
-          productFee.innerHTML = '<b>導覽費用：</b>新台幣 2000 元';
+      nextImage() {
+        if (this.currentIndex + 1 >= this.imageUrls.length) {
+          this.currentIndex = 0;
+        } else {
+          this.currentIndex++;
         }
+        this.drawCurrentImage();
+      }
+
+      prevImage() {
+        if (this.currentIndex - 1 < 0) {
+          this.currentIndex = this.imageUrls.length - 1;
+        } else {
+          this.currentIndex--;
+        }
+        this.drawCurrentImage();
+      }
+    }
+
+    async function createAttractionDataById(id_value) {
+      isComposing = true;
+      const response = await fetch(`${ip_adress}/api/attraction/${id_value}`);
+      const data = await response.json();
+      isComposing = false;
+      return data;
+    };
+
+
+    const productId = document.querySelector(".product").id;
+
+    createAttractionDataById(productId)
+      .then(data => {
+        const attraction_data = data.data;
+        const slider = new ImageSlider(attraction_data.images);
+
+        const profileTitleElement = document.querySelector(".profile-title");
+        profileTitleElement.innerHTML = attraction_data.name;
+
+        const profileDescribeElement = document.querySelector(".profile-describe");
+        profileDescribeElement.innerHTML = attraction_data.category + " at " + attraction_data.mrt;
+
+        const descriptionElement = document.getElementById('description');
+        descriptionElement.innerHTML = attraction_data.description;
+
+        const addressElement = document.getElementById('address');
+        addressElement.innerHTML = attraction_data.address;
+
+        const transportationElement = document.getElementById('transportation');
+        transportationElement.innerHTML = attraction_data.transport;
+      })
+      .catch(error => {
+        console.error(error);
       });
 
-      optionB.addEventListener('change', (event) => {
-        if (event.target.checked) {
-          productFee.innerHTML = '<b>導覽費用：</b>新台幣 2500 元';
-        }
-      });
+    // 建立 header
+    createHeader();
 
-      const dateInput = document.getElementById('date');
+    // 套裝價格改變
+    const optionA = document.getElementById('optionA');
+    const optionB = document.getElementById('optionB');
+    const productFee = document.querySelector('.product-fee');
 
-      // Get today's date in the format "yyyy-mm-dd"
-      const today = new Date().toISOString().split('T')[0];
+    optionA.addEventListener('change', (event) => {
+      if (event.target.checked) {
+        productFee.innerHTML = '<b>導覽費用：</b>新台幣 2000 元';
+      }
+    });
 
-      // Set the min attribute of the date input
-      dateInput.setAttribute('min', today);
+    optionB.addEventListener('change', (event) => {
+      if (event.target.checked) {
+        productFee.innerHTML = '<b>導覽費用：</b>新台幣 2500 元';
+      }
+    });
+
+    const dateInput = document.getElementById('date');
+
+    // Get today's date in the format "yyyy-mm-dd"
+    const today = new Date().toISOString().split('T')[0];
+
+    // Set the min attribute of the date input
+    dateInput.setAttribute('min', today);
 
 
 
-    </script>
-  </body>
+  </script>
+</body>
