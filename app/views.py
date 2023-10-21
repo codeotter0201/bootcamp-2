@@ -12,7 +12,7 @@ from flask import (
 )
 import json
 from .extensions import db
-from .models import Attraction, AttractionFile, User, Order
+from .models import Attraction, AttractionFile, User, Booking
 import jwt
 
 api = Blueprint("api", __name__)
@@ -49,13 +49,13 @@ def create_order():
     date = data.get("date")
     session = data.get("session")
 
-    orders = Order.query.filter_by(email=email).all()
+    orders = Booking.query.filter_by(email=email).all()
     if orders:
         for pending_order in orders:
             db.session.delete(pending_order)
         db.session.commit()
 
-    order = Order(attraction_id=attraction_id, email=email, date=date, session=session)
+    order = Booking(attraction_id=attraction_id, email=email, date=date, session=session)
     db.session.add(order)
     db.session.commit()
     return jsonify(result="訂購成功")
@@ -65,7 +65,7 @@ def get_order():
     token = request.headers.get("Authorization").split()[1]
     user_data = jwt.decode(token, "secret", algorithms=["HS256"])
     email = user_data.get("email")
-    order = Order.query.filter_by(email=email).first()
+    order = Booking.query.filter_by(email=email).first()
     if order:
         return jsonify(result=order.get_json())
     else:
@@ -78,7 +78,7 @@ def delete_order():
     user_data = jwt.decode(token, "secret", algorithms=["HS256"])
     email = user_data.get("email")
 
-    orders = Order.query.filter_by(email=email).all() # 刪除本帳號所有 order
+    orders = Booking.query.filter_by(email=email).all() # 刪除本帳號所有 order
     for order in orders:
         db.session.delete(order)
         db.session.commit()
